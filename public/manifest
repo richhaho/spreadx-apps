@@ -1,0 +1,93 @@
+{
+    "name": "SpreadX",
+    "short_name": "SpreadX",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "description": "SpreadX.",
+    "icons": [
+        {
+            "src": "/16.png",
+            "sizes": "16x16",
+            "type": "image/png"
+        },
+        {
+            "src": "/20.png",
+            "sizes": "20x20",
+            "type": "image/png"
+        },
+        {
+            "src": "/32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "/48.png",
+            "sizes": "48x48",
+            "type": "image/png"
+        },
+        {
+            "src": "/58.png",
+            "sizes": "58x58",
+            "type": "image/png"
+        },
+        {
+            "src": "/64.png",
+            "sizes": "64x64",
+            "type": "image/png"
+        },
+        {
+            "src": "/72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+
+        {
+            "src": "/92.png",
+            "sizes": "92x92",
+            "type": "image/png"
+        },
+
+        {
+            "src": "/114.png",
+            "sizes": "114x114",
+            "type": "image/png"
+        },
+
+        {
+            "src": "/144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+
+        {
+            "src": "/152.png",
+            "sizes": "152x152",
+            "type": "image/png"
+        },
+
+        {
+            "src": "/196.png",
+            "sizes": "196x196",
+            "type": "image/png"
+        },
+
+        {
+            "src": "/512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+
+        {
+            "src": "/1024.png",
+            "sizes": "1024x1024",
+            "type": "image/png"
+        }
+    ],
+    "related_applications": [
+        {
+            "platform": "play",
+            "url": "https://play.google.com/store/apps/details?id=com.spread.lite"
+        }
+    ]
+}
