@@ -50,7 +50,28 @@ onMounted(() => uiStore.getSuppliers())
 const requests = computed(() => uiStore.$state.suppliers.map((item, index) => {
   return {
     ...item,
+    // hard coded for now
     like: index % 2,
+    cartegories: [
+      {
+        id: 1,
+        name: 'Food',
+        image: 'https://eta.ironrocksoftware.com/images/temp/1.png',
+        brand: '',
+      },
+      {
+        id: 2,
+        name: 'Bags',
+        image: 'https://eta.ironrocksoftware.com/images/temp/2.png',
+        brand: '',
+      },
+      {
+        id: 3,
+        name: 'Clothes',
+        image: 'https://eta.ironrocksoftware.com/images/temp/3.png',
+        brand: '',
+      },
+    ]
   }
 }))
 
@@ -281,136 +302,130 @@ const onVerifyCodeSubmit = () => {
     <VRow>
       <VCol cols="12">
         <VCard title="SUPPLIERS LIST">
-          <template #append>
-            <VBtnToggle v-model="isGridView" multiple>
-              <VBtn icon @click="isGridView = true" :active="isGridView">
-                <VIcon>mdi-view-grid</VIcon>
-              </VBtn>
-              <VBtn icon @click="isGridView = false" :active="!isGridView">
-                <VIcon>mdi-google-maps</VIcon>
-              </VBtn>
-            </VBtnToggle>
-          </template>
-
           <VDivider />
+          <VCardText class="d-flex flex-wrap py-4 gap-4">
+            <div
+              class=""
+              style="min-width: 80px;"
+            >
+              <VSelect
+                v-model="itemsPerPage"
+                density="compact"
+                variant="outlined"
+                :items="[
+                  { value: 0, title: 'All Suppliers' },
+                  { value: 10, title: '10' },
+                  { value: 25, title: '25' },
+                  { value: 50, title: '50' },
+                  { value: 100, title: '100' },
+                ]"
+                @update:model-value="itemsPerPage = parseInt($event, 10)"
+              />
+            </div>
 
-          <div v-if="isGridView">
-            <VCardText class="d-flex flex-wrap py-4 gap-4">
-              <div
-                class=""
-                style="min-width: 80px;"
-              >
-                <VSelect
-                  v-model="itemsPerPage"
+            <VSpacer />
+
+            <div class="app-user-search-filter d-flex align-center flex-wrap gap-4">
+              <!-- 👉 Search  -->
+              <div style="width: 20rem;">
+                <VTextField
+                  v-model="searchQuery"
+                  icon="tabler-search"
+                  placeholder="Search Supplier"
                   density="compact"
-                  variant="outlined"
-                  :items="[
-                    { value: 0, title: 'All Suppliers' },
-                    { value: 10, title: '10' },
-                    { value: 25, title: '25' },
-                    { value: 50, title: '50' },
-                    { value: 100, title: '100' },
-                  ]"
-                  @update:model-value="itemsPerPage = parseInt($event, 10)"
-                />
+                  @change="search()"
+                >
+                  <template #prepend-inner>
+                    <VIcon
+                      icon="tabler-search"
+                      size="23"
+                    />
+                  </template>
+                </VTextField>
               </div>
-
-              <VSpacer />
-
-              <div class="app-user-search-filter d-flex align-center flex-wrap gap-4">
-                <!-- 👉 Search  -->
-                <div style="width: 20rem;">
-                  <VTextField
-                    v-model="searchQuery"
-                    icon="tabler-search"
-                    placeholder="Search Supplier"
-                    density="compact"
-                    @change="search()"
-                  >
-                    <template #prepend-inner>
-                      <VIcon
-                        icon="tabler-search"
-                        size="23"
-                      />
-                    </template>
-                  </VTextField>
-                </div>
-              </div>
-            </VCardText>
-            <VCardText>
-              <VRow>
-                <VCol v-for="item in items"
-                      cols="12" sm="6" md="6" lg="4" xl="3">
-                  <VCard class="py-5">
-                    <VCardText class="d-flex flex-column  justify-center ">
-                      <VRow>
-                        <VCol>
-                          <VAvatar class="mt-4 text-center"
-                                  size="60"
-                                  variant="outlined"
-                                  :color="item.color || 'warning'"
-                                  :image="avatarHardCoded" />
-                        </VCol>
-                        <VCol>
-                          <div class="d-flex justify-end gap-2">
-                            <VIcon
-                              size="22"
-                              icon="tabler-heart"
-                              variant="elevated"
-                              :color.sync="item.like ? 'error' : ''"
-                              @click="() => doLike(item)"
-                            />
-                          </div>
-                        </VCol>
-                      </VRow>
-                      <div class="d-flex justify-end gap-2">
-                        <VBtn
-                          v-if="item.exists == 0"
-                          size="x-small"
-                          @click="becomeCustomer(item)"
-                          color="success"
-                        >
-                          Become Customer
-                        </VBtn>
-                        <VBtn
-                          v-if="item.verified == 0 && item.exists == 1"
-                          size="x-small"
-                          color="secondary"
-                        >
-                          Pending Approval {{ item.tracking_no }}
-                        </VBtn>
-                        <VBtn
-                          v-if="item.verified == 1"
-                          size="x-small"
-                          color="primary"
-                          :to="supplierUrl(item.auth_id)"
-                        >
-                          Visit
-                        </VBtn>
-                      </div>
-                    </VCardText>
-                    <VCardText class="d-flex flex-column  justify-center ">
-                      <h4 class="">
-                        {{ item.name }}
-                      </h4>
-                      <span class="text-xs mt-1">{{ item.subtitle || subtitleHardcoded }}</span>
-                      <h5 class="mt-2"><span class="text-success">Open</span> : <span>{{ item.date || timeHardCoded }}</span></h5>
-                      <VDivider class="mt-2"></VDivider>                    
-                    </VCardText>
-                    <VCardText>
+            </div>
+          </VCardText>
+          <VCardText>
+            <VRow>
+              <VCol v-for="item in items"
+                    cols="12" sm="6" md="6" lg="4" xl="3">
+                <VCard class="py-5">
+                  <VCardText class="d-flex flex-column  justify-center ">
+                    <VRow>
+                      <VCol>
+                        <VAvatar class="mt-4 text-center"
+                                size="60"
+                                variant="outlined"
+                                :color="item.color || 'warning'"
+                                :image="avatarHardCoded" />
+                      </VCol>
+                      <VCol>
+                        <div class="d-flex justify-end gap-2">
+                          <VIcon
+                            size="22"
+                            icon="tabler-heart"
+                            variant="elevated"
+                            :color.sync="item.like ? 'error' : ''"
+                            @click="() => doLike(item)"
+                          />
+                        </div>
+                      </VCol>
+                    </VRow>
+                    <div class="d-flex justify-end gap-2">
                       <VBtn
-                          color="primary"
-                          variant="tonal"
-                          :to="item.url"
+                        v-if="item.exists == 0"
+                        size="x-small"
+                        @click="becomeCustomer(item)"
+                        color="success"
                       >
-                        View Supplier
+                        Become Customer
                       </VBtn>
-                    </VCardText>
-                  </VCard>
-                </VCol>
-              </VRow>
-            </VCardText>
-          </div>
+                      <VBtn
+                        v-if="item.verified == 0 && item.exists == 1"
+                        size="x-small"
+                        color="secondary"
+                      >
+                        Pending Approval {{ item.tracking_no }}
+                      </VBtn>
+                      <VBtn
+                        v-if="item.verified == 1"
+                        size="x-small"
+                        color="primary"
+                        :to="supplierUrl(item.auth_id)"
+                      >
+                        Visit
+                      </VBtn>
+                    </div>
+                  </VCardText>
+                  <VCardText class="d-flex flex-column  justify-center ">
+                    <h4 class="">
+                      {{ item.name }}
+                    </h4>
+                    <span class="text-xs mt-1">{{ item.subtitle || subtitleHardcoded }}</span>
+                    <h5 class="mt-2"><span class="text-success">Open</span> : <span>{{ item.date || timeHardCoded }}</span></h5>
+                    <h5 class="mt-2"><span>Categories</span> : <span>{{ item.cartegories.map(item => item.name).join(', ') }}</span></h5>
+                    <VDivider class="mt-2"></VDivider>
+                  </VCardText>
+                  <VCardText>
+                    <VRow>
+                      <VCol cols="4" v-for="category in item.cartegories">
+                        <img class="rounded shadow" :src="category.image" width="90" height="70">
+                      </VCol>
+                    </VRow>
+                  </VCardText>
+                  <VCardText>
+                    <VBtn
+                        color="primary"
+                        variant="tonal"
+                        :to="item.url"
+                    >
+                      View Supplier
+                    </VBtn>
+                  </VCardText>
+                </VCard>
+              </VCol>
+            </VRow>
+          </VCardText>
         </VCard>
       </VCol>
     </VRow>
