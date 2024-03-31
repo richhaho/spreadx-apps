@@ -50,7 +50,6 @@ onMounted(() => uiStore.getSuppliers())
 const requests = computed(() => uiStore.$state.suppliers.map((item, index) => {
   return {
     ...item,
-    // hard coded for now
     like: index % 2,
     cartegories: [
       {
@@ -402,7 +401,6 @@ const onVerifyCodeSubmit = () => {
                       {{ item.name }}
                     </h4>
                     <span class="text-xs mt-1">{{ item.subtitle || subtitleHardcoded }}</span>
-                    <h5 class="mt-2"><span class="text-success">Open</span> : <span>{{ item.date || timeHardCoded }}</span></h5>
                     <h5 class="mt-2"><span>Categories</span> : <span>{{ item.cartegories.map(item => item.name).join(', ') }}</span></h5>
                     <VDivider class="mt-2"></VDivider>
                   </VCardText>
