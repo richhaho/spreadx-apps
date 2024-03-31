@@ -2,7 +2,6 @@
 import axios_lite from "@/plugins/axios_lite";
 import { useDemoVendorStore } from '@/store/demoVendorStore';
 import { useUiStore } from "@/store/uiStore";
-import avatarHardCoded from '@images/avatars/avatar-14.png';
 import { onMounted, ref } from "vue";
 
 const demoVendorStore = useDemoVendorStore();
@@ -352,11 +351,9 @@ const onVerifyCodeSubmit = () => {
                   <VCardText class="d-flex flex-column  justify-center ">
                     <VRow>
                       <VCol>
-                        <VAvatar class="mt-4 text-center"
-                                size="60"
-                                variant="outlined"
-                                :color="item.color || 'warning'"
-                                :image="avatarHardCoded" />
+                        <VImg
+                          class="mt-4 text-center"
+                          :src="item.logo" />
                       </VCol>
                       <VCol>
                         <div class="d-flex justify-end gap-2">
@@ -364,7 +361,7 @@ const onVerifyCodeSubmit = () => {
                             size="22"
                             icon="tabler-heart"
                             variant="elevated"
-                            :color.sync="item.like ? 'error' : ''"
+                            :color.sync="item.favourite ? 'error' : ''"
                             @click="() => doLike(item)"
                           />
                         </div>
@@ -400,13 +397,13 @@ const onVerifyCodeSubmit = () => {
                     <h4 class="">
                       {{ item.name }}
                     </h4>
-                    <span class="text-xs mt-1">{{ item.subtitle || subtitleHardcoded }}</span>
+                    <span class="text-xs mt-1">{{ item.description }}</span>
                     <h5 class="mt-2"><span>Categories</span> : <span>{{ item.cartegories.map(item => item.name).join(', ') }}</span></h5>
                     <VDivider class="mt-2"></VDivider>
                   </VCardText>
                   <VCardText>
                     <VRow>
-                      <VCol cols="4" v-for="category in item.cartegories">
+                      <VCol cols="4" v-for="category in item.top_products">
                         <img class="rounded shadow" :src="category.image" width="90" height="70">
                       </VCol>
                     </VRow>
@@ -415,7 +412,7 @@ const onVerifyCodeSubmit = () => {
                     <VBtn
                         color="primary"
                         variant="tonal"
-                        :to="item.url"
+                        :to="`/apps/suppliers/${item.auth_id}`"
                     >
                       View Supplier
                     </VBtn>
