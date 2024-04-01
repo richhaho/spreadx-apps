@@ -398,7 +398,7 @@ const onVerifyCodeSubmit = () => {
                       {{ item.name }}
                     </h4>
                     <span class="text-xs mt-1">{{ item.description }}</span>
-                    <h5 class="mt-2"><span>Categories</span> : <span>{{ item.cartegories.map(item => item.name).join(', ') }}</span></h5>
+                    <h5 class="mt-2"><span>Category</span> : <span>{{ item.category ? item.category.name : '' }}</span></h5>
                     <VDivider class="mt-2"></VDivider>
                   </VCardText>
                   <VCardText>
