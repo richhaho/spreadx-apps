@@ -26,8 +26,8 @@ export const useDemoVendorStore = defineStore("useDemoVendorStore", {
       }, 500);
     },
     
-    fetchProducts(){
-      axios_lite.get('v1/get_vendors_products').then((response) => {
+    fetchProducts(supplier_id){
+      axios_lite.get('v1/get_vendors_products?business_id=63&supplier_id=' + supplier_id).then((response) => {
         this.products = response.data.products;
    
       });

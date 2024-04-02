@@ -1,7 +1,9 @@
 <script setup>
+import { useDemoVendorStore } from '@/store/demoVendorStore';
 import { useUiStore } from '@/store/uiStore';
 import { onBeforeMount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+const demoVendorStore = useDemoVendorStore();
 
 const uiStore = useUiStore()
 const route = useRoute()
@@ -43,9 +45,9 @@ const getProductList = () => {
     }) : null
   }
 }
-
+demoVendorStore.fetchProducts(supplier_id)
 getProductList()
-
+const products = computed(() => demoVendorStore.$state.products)
 const suppliers = computed(() => uiStore.$state.suppliers)
 
 const currentSupplier = computed(() => {
@@ -87,9 +89,8 @@ const navigateTab = (() => {
       sm="4"
       md="3"
       lg="3"
-      class="d-none"
     >
-      <h2 v-if="currentSupplier.name">
+      <h3 v-if="currentSupplier.name">
         <RouterLink
           to="/apps/suppliers"
           class="supplier-link"
@@ -97,7 +98,7 @@ const navigateTab = (() => {
           Supplier list >>
         </RouterLink>
         {{ currentSupplier.name }}
-      </h2>
+      </h3>
       <h3
         v-else
         color="error"
@@ -187,6 +188,9 @@ const navigateTab = (() => {
     <VCol
       cols="12"
       relative
+      sm="8"
+      md="9"
+      lg="9"
     >
       <VCard class="header">
         <VRow>
@@ -215,14 +219,16 @@ const navigateTab = (() => {
       >
         <VCardText class="d-flex flex-wrap py-4 gap-4">
           <VRow>
-              <VCol v-for="product in currentSupplier.top_products"
+              <VCol v-for="product in products"
                     cols="12" sm="4" md="4" lg="3" xl="3">
                 <VCard class="py-5">
                   <VImg
                     class="mt-4 text-center"
                     :src="product.image" />
-                  <VCardText>
+                  <VCardText style="height: 100px;">
                     <h4>{{ product.name }}</h4>
+                  </VCardText>
+                  <VCardText>
                     <span class="text-sm">Sold by:
                       <img
                         :title="currentSupplier.name"
@@ -232,11 +238,11 @@ const navigateTab = (() => {
                     </span>
                   </VCardText>
                   <VCardText>
-                    <h4 class="text-success">{{ product.price || 'AED 138.00' }}</h4>
+                    <h4 class="text-success">AED {{ product.price }}</h4>
                     <span class="text-sm" style="text-decoration: line-through">
-                      {{ product.old_price || 'AED 150.00' }}
+                      AED {{ product.packing_price || product.price + 2 }}
                     </span>
-                    <span class="text-xs ml-2 text-error">{{ product.off || '8%' }} Off</span>
+                    <span class="text-xs ml-2 text-error">{{ Math.round(100 - 100 * product.price / (product.packing_price || product.price + 2)) }}% Off</span>
                   </VCardText>
                 </VCard>
               </VCol>

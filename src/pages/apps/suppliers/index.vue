@@ -353,6 +353,8 @@ const onVerifyCodeSubmit = () => {
                       <VCol>
                         <VImg
                           class="mt-4 text-center"
+                          width="100"
+                          height="100"
                           :src="item.logo" />
                       </VCol>
                       <VCol>
@@ -393,11 +395,15 @@ const onVerifyCodeSubmit = () => {
                       </VBtn>
                     </div>
                   </VCardText>
-                  <VCardText class="d-flex flex-column  justify-center ">
+                  <VCardText style="height: 50px;">
                     <h4 class="">
                       {{ item.name }}
                     </h4>
+                  </VCardText>
+                  <VCardText style="height: 130px;">
                     <span class="text-xs mt-1">{{ item.description }}</span>
+                  </VCardText>
+                  <VCardText>
                     <h5 class="mt-2"><span>Category</span> : <span>{{ item.category ? item.category.name : '' }}</span></h5>
                     <VDivider class="mt-2"></VDivider>
                   </VCardText>
