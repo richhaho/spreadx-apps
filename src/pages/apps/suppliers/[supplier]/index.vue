@@ -223,7 +223,7 @@ function calc_stock(product) {
         </VRow>
       </VCard>
       <VCard
-        v-if="currentSupplier.top_products"
+        v-if="products && products.length > 0"
         title="Products"
         class="mt-1"
       >
@@ -248,6 +248,7 @@ function calc_stock(product) {
                       size="x-small"
                       class="text-high-emphasis ms-n1"
                       style="width: 22px; height: 30px;"
+                      :to="`/apps/suppliers/${supplier_id}/product/${product.id}`"
                     >
                       <VIcon
                         size="22"
