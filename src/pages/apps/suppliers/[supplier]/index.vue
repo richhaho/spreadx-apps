@@ -45,7 +45,10 @@ const getProductList = () => {
     }) : null
   }
 }
-demoVendorStore.fetchProducts(supplier_id)
+const userData = JSON.parse(localStorage.getItem("userData"));
+const business_id = userData.business.id
+
+demoVendorStore.fetchProducts(business_id, supplier_id)
 getProductList()
 const products = computed(() => demoVendorStore.$state.products)
 const suppliers = computed(() => uiStore.$state.suppliers)
@@ -89,6 +92,7 @@ const navigateTab = (() => {
       sm="4"
       md="3"
       lg="3"
+      class="d-none"
     >
       <h3 v-if="currentSupplier.name">
         <RouterLink
@@ -188,9 +192,6 @@ const navigateTab = (() => {
     <VCol
       cols="12"
       relative
-      sm="8"
-      md="9"
-      lg="9"
     >
       <VCard class="header">
         <VRow>
