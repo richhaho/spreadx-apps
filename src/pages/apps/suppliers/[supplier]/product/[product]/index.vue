@@ -58,9 +58,9 @@ function calc_stock(product) {
         title="Product"
         class="mt-1"
       >
-        <VCardText class="d-flex flex-wrap py-4 gap-4">
+        <VCardText>
           <VRow>
-            <VCol cols="6">
+            <VCol cols="6" lg="6">
               <div class="d-flex pr-2">
                 <div class="text-xs text-white" style="background-color: #f76726; border-radius: 4px;">&nbsp; Random Special &nbsp;</div>
               </div>
@@ -69,7 +69,7 @@ function calc_stock(product) {
                 :src="product.image"
               />
             </VCol>
-            <VCol cols="6">
+            <VCol cols="6" lg="6">
               <VCardText>
                 <h3>{{ product.name }}</h3>
                 <h4 class="mt-5 pt-5">
@@ -110,7 +110,7 @@ function calc_stock(product) {
             </VCol>
           </VRow>
           <VRow>
-            <VCol cols="12">
+            <VCol cols="12" lg="12">
               <VDivider />
               <VCardText>
                 <h4>Description</h4>
