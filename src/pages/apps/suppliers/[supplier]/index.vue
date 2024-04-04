@@ -45,7 +45,10 @@ const getProductList = () => {
     }) : null
   }
 }
-demoVendorStore.fetchProducts(supplier_id)
+const userData = JSON.parse(localStorage.getItem("userData"));
+const business_id = userData.business.id
+
+demoVendorStore.fetchProducts(business_id, supplier_id)
 getProductList()
 const products = computed(() => demoVendorStore.$state.products)
 const suppliers = computed(() => uiStore.$state.suppliers)
@@ -79,6 +82,15 @@ const payments = [
 const navigateTab = (() => {
   router.push({ name: 'checkout' })
 })
+
+function calc_stock(product) {
+  const stock = JSON.parse(product.stock) || []
+  let sum = 0;
+  stock.forEach((item) => {
+    sum += item.weight * item.qty
+  })
+  return sum ? sum + product.unit_name : 'Out of Stock'
+}
 </script>
 
 <template>
@@ -89,6 +101,7 @@ const navigateTab = (() => {
       sm="4"
       md="3"
       lg="3"
+      class="d-none"
     >
       <h3 v-if="currentSupplier.name">
         <RouterLink
@@ -188,9 +201,6 @@ const navigateTab = (() => {
     <VCol
       cols="12"
       relative
-      sm="8"
-      md="9"
-      lg="9"
     >
       <VCard class="header">
         <VRow>
@@ -213,7 +223,7 @@ const navigateTab = (() => {
         </VRow>
       </VCard>
       <VCard
-        v-if="currentSupplier.top_products"
+        v-if="products && products.length > 0"
         title="Products"
         class="mt-1"
       >
@@ -222,13 +232,34 @@ const navigateTab = (() => {
               <VCol v-for="product in products"
                     cols="12" sm="4" md="4" lg="3" xl="3">
                 <VCard class="py-5">
+                  <div class="d-flex pr-2">
+                    <div class="text-xs text-white" style="background-color: #f76726; border-radius: 4px;">&nbsp; Random Special &nbsp;</div>
+                  </div>
+                  <div class="d-flex justify-end pr-2" style="margin-top: -16px">
+                    <div class="text-xs text-white" style="background-color: #d8345f;">&nbsp; {{ Math.round(100 - 100 * product.price / (product.packing_price || product.price + 2)) }}% Off &nbsp;</div>
+                  </div>
                   <VImg
                     class="mt-4 text-center"
-                    :src="product.image" />
-                  <VCardText style="height: 100px;">
-                    <h4>{{ product.name }}</h4>
+                    :src="product.image"
+                  />
+                  <div class="d-flex justify-end pr-2" style="margin-top: -50px">
+                    <VBtn
+                      color="success"
+                      size="x-small"
+                      class="text-high-emphasis ms-n1"
+                      style="width: 22px; height: 30px;"
+                      :to="`/apps/suppliers/${supplier_id}/product/${product.id}`"
+                    >
+                      <VIcon
+                        size="22"
+                        icon="tabler-plus"
+                      />
+                    </VBtn>
+                  </div>
+                  <VCardText style="height: 80px;">
+                    <h4 class="text-center">{{ product.name }}</h4>
                   </VCardText>
-                  <VCardText>
+                  <VCardText class="d-none">
                     <span class="text-sm">Sold by:
                       <img
                         :title="currentSupplier.name"
@@ -238,11 +269,15 @@ const navigateTab = (() => {
                     </span>
                   </VCardText>
                   <VCardText>
-                    <h4 class="text-success">AED {{ product.price }}</h4>
-                    <span class="text-sm" style="text-decoration: line-through">
+                    <h6 class="text-center" style="text-decoration: line-through">
                       AED {{ product.packing_price || product.price + 2 }}
-                    </span>
-                    <span class="text-xs ml-2 text-error">{{ Math.round(100 - 100 * product.price / (product.packing_price || product.price + 2)) }}% Off</span>
+                    </h6>
+                    <h5 class="text-error text-center">AED {{ product.price }}</h5>
+                  </VCardText>
+                  <VCardText class="d-flex">
+                    <div class="pt-1 pb-1 w-100 text-center" style="background-color: #def8e3; border-radius: 5px;">
+                      <h6>{{ calc_stock(product) }}</h6>
+                    </div>
                   </VCardText>
                 </VCard>
               </VCol>
