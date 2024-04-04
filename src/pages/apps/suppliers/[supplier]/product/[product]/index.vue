@@ -84,7 +84,7 @@ function calc_stock(product) {
               <VCardText>
                 <h6>Size: {{ calc_stock(product) }}</h6>
               </VCardText>
-              <VCardText>
+              <VCardText v-if="product.expiry_date">
                 <VCard>
                   <VRow class="mt-1 mb-1">
                     <VCol cols="2">
