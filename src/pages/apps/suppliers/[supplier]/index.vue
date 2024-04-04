@@ -3,6 +3,7 @@ import { useDemoVendorStore } from '@/store/demoVendorStore';
 import { useUiStore } from '@/store/uiStore';
 import { onBeforeMount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { PerfectScrollbar } from 'vue3-perfect-scrollbar';
 const demoVendorStore = useDemoVendorStore();
 
 const uiStore = useUiStore()
@@ -56,6 +57,8 @@ const suppliers = computed(() => uiStore.$state.suppliers)
 const currentSupplier = computed(() => {
   return suppliers.value.find((item) => item.auth_id == supplier_id) || {}
 })
+
+const categories = computed(() => products.value.map((item) => item.category).filter((value, index, array) => array.indexOf(value) === index))
 
 const open = ref(['Users', 'Admin'])
 
@@ -223,38 +226,60 @@ function calc_stock(product) {
         </VRow>
       </VCard>
       <VCard
-        v-if="products && products.length > 0"
-        title="Products"
-        class="mt-1"
+        v-for="category in categories"
+        :title="category"
+        class="mt-5"
       >
-        <VCardText class="d-flex flex-wrap py-4 gap-4">
-          <VRow>
-              <VCol v-for="product in products"
-                    cols="12" sm="4" md="4" lg="3" xl="3">
-                <VCard class="py-5">
+        <PerfectScrollbar :options="{ wheelPropagation: false, suppressScrollY: true }">
+          <VCardText style="overflow-x: auto;">
+            <div style="width: max-content;">
+              <template v-for="product in products">
+                <VCard
+                  class="mr-3"
+                  v-if="product.category === category"
+                  style="float: left; width: 220px;"
+                >
                   <div class="d-flex pr-2">
                     <div class="text-xs text-white" style="background-color: #f76726; border-radius: 4px;">&nbsp; Random Special &nbsp;</div>
                   </div>
                   <div class="d-flex justify-end pr-2" style="margin-top: -16px">
                     <div class="text-xs text-white" style="background-color: #d8345f;">&nbsp; {{ Math.round(100 - 100 * product.price / (product.packing_price || product.price + 2)) }}% Off &nbsp;</div>
                   </div>
-                  <VImg
-                    class="mt-4 text-center"
-                    :src="product.image"
-                  />
-                  <div class="d-flex justify-end pr-2" style="margin-top: -50px">
-                    <VBtn
-                      color="success"
-                      size="x-small"
-                      class="text-high-emphasis ms-n1"
-                      style="width: 22px; height: 30px;"
-                      :to="`/apps/suppliers/${supplier_id}/product/${product.id}`"
-                    >
-                      <VIcon
-                        size="22"
-                        icon="tabler-plus"
-                      />
-                    </VBtn>
+                  <RouterLink :to="`/apps/suppliers/${supplier_id}/product/${product.id}`">
+                    <VImg
+                      class="mt-4 text-center"
+                      :src="product.image"
+                    />
+                  </RouterLink>
+                  <div class="d-flex justify-end pr-1 mt-1" >
+                    <div class="border">
+                      <VBtn
+                        color="success"
+                        size="x-small"
+                        class="text-high-emphasis ms-n1 mr-3"
+                        style="width: 20px; height: 30px;"
+                        :disabled="!product.cart"
+                        @click="product.cart--"
+                      >
+                        <VIcon
+                          size="22"
+                          icon="tabler-minus"
+                        />
+                      </VBtn>
+                      <span class="mr-4 mt-1">{{product.cart || 0}}</span>
+                      <VBtn
+                        color="success"
+                        size="x-small"
+                        class="text-high-emphasis ms-n1"
+                        style="width: 20px; height: 30px;"
+                        @click="product.cart = (product.cart || 0) + 1"
+                      >
+                        <VIcon
+                          size="22"
+                          icon="tabler-plus"
+                        />
+                      </VBtn>
+                    </div>
                   </div>
                   <VCardText style="height: 80px;">
                     <h4 class="text-center">{{ product.name }}</h4>
@@ -280,9 +305,10 @@ function calc_stock(product) {
                     </div>
                   </VCardText>
                 </VCard>
-              </VCol>
-          </VRow>
-        </VCardText>
+              </template>
+            </div>
+          </VCardText>
+        </PerfectScrollbar>
       </VCard>
     </VCol>
   </VRow>
