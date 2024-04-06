@@ -1,6 +1,8 @@
 <script setup>
+import { useUiStore } from '@/store/uiStore';
+const uiStore = useUiStore()
 
-const cart_products = computed(() => JSON.parse(localStorage.getItem('cart') || '[]'))
+const cart_products = computed(() => uiStore.$state.cartItems)
 function update_cart(product) {
   const products = JSON.parse(localStorage.getItem('cart') || '[]')
   const index = products.findIndex((item) => item.id === product.id)
@@ -12,6 +14,7 @@ function update_cart(product) {
     products.splice(index, 1, product)
   }
   localStorage.setItem('cart', JSON.stringify(products))
+  uiStore.$state.cartItems = products
 }
 
 function removeFromCart(product) {
@@ -23,10 +26,11 @@ function removeFromCart(product) {
     products.splice(index, 1)
   }
   localStorage.setItem('cart', JSON.stringify(products))
+  uiStore.$state.cartItems = products
 }
 
 function get_total() {
-  const products = JSON.parse(localStorage.getItem('cart') || '[]')
+  const products = uiStore.$state.cartItems
   let sum = 0;
   products.forEach((item) => {
     sum = sum + item.price * item.cart

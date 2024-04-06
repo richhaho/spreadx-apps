@@ -10,7 +10,7 @@ const getCartDetails = (() => {
 });
 
 const cartItems = computed(() => {
-  return JSON.parse(localStorage.getItem('cart') || '[]')
+  return uiStore.$state.cartItems
 })
 </script>
 

@@ -87,12 +87,13 @@ const navigateTab = (() => {
 })
 
 function calc_stock(product) {
-  const stock = JSON.parse(product.stock) || []
-  let sum = 0;
-  stock.forEach((item) => {
-    sum += item.weight * item.qty
-  })
-  return sum ? sum + product.unit_name : 'Out of Stock'
+  // const stock = JSON.parse(product.stock) || []
+  // let sum = 0;
+  // stock.forEach((item) => {
+  //   sum += item.weight * item.qty
+  // })
+  // return sum ? sum + product.unit_name : 'Out of Stock'
+  return product.stock_availability ? product.stock_availability + product.unit_name : 'Out of Stock'
 }
 function update_cart(product) {
   const products = JSON.parse(localStorage.getItem('cart') || '[]')
@@ -105,6 +106,7 @@ function update_cart(product) {
     products.splice(index, 1, product)
   }
   localStorage.setItem('cart', JSON.stringify(products))
+  uiStore.$state.cartItems = products
 }
 </script>
 
@@ -243,11 +245,10 @@ function update_cart(product) {
         class="mt-5"
       >
         <PerfectScrollbar :options="{ wheelPropagation: false, suppressScrollY: true }">
-          <VCardText style="overflow-x: auto;">
-            <div style="width: max-content;">
+            <div style="width: max-content;" class="pl-3">
               <template v-for="product in products">
                 <VCard
-                  class="mr-3 product-item"
+                  class="mb-5 mr-3 product-item"
                   v-if="product.category === category"
                 >
                   <div class="d-flex pr-2">
@@ -318,7 +319,6 @@ function update_cart(product) {
                 </VCard>
               </template>
             </div>
-          </VCardText>
         </PerfectScrollbar>
       </VCard>
     </VCol>
@@ -364,7 +364,7 @@ function update_cart(product) {
     width: 120px;
   }
   .product-name {
-    height: 100px; line-height: 90% !important;
+    height: 120px; line-height: 90% !important;
   }
 }
 </style>
