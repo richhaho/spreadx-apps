@@ -247,9 +247,8 @@ function update_cart(product) {
             <div style="width: max-content;">
               <template v-for="product in products">
                 <VCard
-                  class="mr-3"
+                  class="mr-3 product-item"
                   v-if="product.category === category"
-                  style="float: left; width: 220px;"
                 >
                   <div class="d-flex pr-2">
                     <div class="text-xs text-white" style="background-color: #f76726; border-radius: 4px;">&nbsp; Random Special &nbsp;</div>
@@ -293,8 +292,8 @@ function update_cart(product) {
                       </VBtn>
                     </div>
                   </div>
-                  <VCardText style="height: 80px;">
-                    <h4 class="text-center">{{ product.name }}</h4>
+                  <VCardText class="product-name">
+                    <h5 class="text-center">{{ product.name }}</h5>
                   </VCardText>
                   <VCardText class="d-none">
                     <span class="text-sm">Sold by:
@@ -309,7 +308,7 @@ function update_cart(product) {
                     <h6 class="text-center" style="text-decoration: line-through">
                       AED {{ product.packing_price || product.price + 2 }}
                     </h6>
-                    <h5 class="text-error text-center">AED {{ product.price }}</h5>
+                    <h6 class="text-error text-center">AED {{ product.price }}</h6>
                   </VCardText>
                   <VCardText class="d-flex">
                     <div class="pt-1 pb-1 w-100 text-center" style="background-color: #def8e3; border-radius: 5px;">
@@ -351,5 +350,21 @@ function update_cart(product) {
   margin-block: 40px;
   margin-inline: auto;
   max-inline-size: 800px;
+}
+
+.product-item {
+  float: left;
+  width: 220px;
+}
+.product-name {
+  height: 80px;
+}
+@media only screen and (max-width: 600px) {
+  .product-item {
+    width: 120px;
+  }
+  .product-name {
+    height: 100px; line-height: 90% !important;
+  }
 }
 </style>
