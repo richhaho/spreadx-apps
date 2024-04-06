@@ -94,6 +94,18 @@ function calc_stock(product) {
   })
   return sum ? sum + product.unit_name : 'Out of Stock'
 }
+function update_cart(product) {
+  const products = JSON.parse(localStorage.getItem('cart') || '[]')
+  const index = products.findIndex((item) => item.id === product.id)
+  if (index < 0) {
+    products.push(product)
+  } else if (!product.cart) {
+    products.splice(index, 1)
+  } else {
+    products.splice(index, 1, product)
+  }
+  localStorage.setItem('cart', JSON.stringify(products))
+}
 </script>
 
 <template>
@@ -259,7 +271,7 @@ function calc_stock(product) {
                         class="text-high-emphasis ms-n1 mr-3"
                         style="width: 20px; height: 30px;"
                         :disabled="!product.cart"
-                        @click="product.cart--"
+                        @click="() => { product.cart--; update_cart(product) }"
                       >
                         <VIcon
                           size="22"
@@ -272,7 +284,7 @@ function calc_stock(product) {
                         size="x-small"
                         class="text-high-emphasis ms-n1"
                         style="width: 20px; height: 30px;"
-                        @click="product.cart = (product.cart || 0) + 1"
+                        @click="() => { product.cart = (product.cart || 0) + 1; update_cart(product) }"
                       >
                         <VIcon
                           size="22"

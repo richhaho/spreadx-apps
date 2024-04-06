@@ -9,6 +9,9 @@ const getCartDetails = (() => {
   
 });
 
+const cartItems = computed(() => {
+  return JSON.parse(localStorage.getItem('cart') || '[]')
+})
 </script>
 
 <template>
@@ -18,11 +21,10 @@ const getCartDetails = (() => {
     variant="text"
     color="default"
     size="small"
-    @click="getCartDetails()"
+    :to="`/apps/suppliers/cart`"
   >
-  <h4>
-
-    {{ uiStore.$state.cartItems.length > 0 ? uiStore.$state.cartItems.length :''  }}
+  <h4 class="text-error">
+    {{ cartItems.length > 0 ? cartItems.length :''  }}
   </h4>
     <VIcon
       icon="tabler-shopping-cart"

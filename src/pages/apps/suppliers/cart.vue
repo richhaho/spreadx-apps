@@ -1,0 +1,240 @@
+<script setup>
+
+const cart_products = computed(() => JSON.parse(localStorage.getItem('cart') || '[]'))
+function update_cart(product) {
+  const products = JSON.parse(localStorage.getItem('cart') || '[]')
+  const index = products.findIndex((item) => item.id === product.id)
+  if (index < 0) {
+    products.push(product)
+  } else if (!product.cart) {
+    products.splice(index, 1)
+  } else {
+    products.splice(index, 1, product)
+  }
+  localStorage.setItem('cart', JSON.stringify(products))
+}
+
+function removeFromCart(product) {
+  const products = JSON.parse(localStorage.getItem('cart') || '[]')
+  const index = products.findIndex((item) => item.id === product.id)
+  if (index < 0) {
+    return
+  } else {
+    products.splice(index, 1)
+  }
+  localStorage.setItem('cart', JSON.stringify(products))
+}
+
+function get_total() {
+  const products = JSON.parse(localStorage.getItem('cart') || '[]')
+  let sum = 0;
+  products.forEach((item) => {
+    sum = sum + item.price * item.cart
+  })
+  return sum
+}
+
+const total = computed(() => get_total())
+
+function calc_unit(product) {
+  const stock = JSON.parse(product.stock) || []
+  let sum;
+  stock.forEach((item) => {
+    sum = item.weight
+  })
+  return sum ? sum + product.unit_name : ''
+}
+</script>
+
+<template>
+  <VCard
+      title="Home / Cart"
+      class="mt-3"
+  >
+    <VRow>
+      <VCol
+        cols="12"
+        lg="8"
+        sm="12"        
+        relative
+      >
+        <VCardText>
+          Your Items ({{ cart_products.length }})
+        </VCardText>
+        <VCard class="ml-5 mr-5">
+          <VCardText>
+            <VRow>
+              <VCol cols="5">
+                <div class="d-flex">
+                  <span class="text-warning text-bold">Shipment</span>
+                </div>
+                <div>Total: AED {{ total }}</div>
+              </VCol>
+              <VCol cols="5">
+                <div class="d-flex justify-end">
+                  <span class="text-sm text-warning">Express Delivery - 90 mins</span>
+                </div>
+                <div class="d-flex justify-end">
+                  <span class="text-sm">Delevery Fee: AED 6</span>
+                </div>
+              </VCol>
+              <VCol cols="2">
+                <VBtn color="warning" size="x-small">
+                  To Express
+                </VBtn>
+              </VCol>
+            </VRow>
+          </VCardText>
+          <VCard>
+            <VCardText
+              class="mr-3"
+              v-for="product in cart_products"
+            >
+              <VRow>
+                <VCol cols="2">
+                  <VImg
+                    class="mt-4 text-center"
+                    :src="product.image"
+                  />
+                </VCol>
+                <VCol cols="7">
+                  <VCardText>
+                    <h4>{{ product.name }}</h4>
+                    <h5 class="text-error mt-2">AED {{ product.price }}</h5>
+                  </VCardText>
+                  <VCardText class="d-flex">
+                    <div class="pt-1 pb-1 pr-2 pl-2 text-center border" style="border-radius: 5px;">
+                      <h6>UAE</h6>
+                    </div>
+                    <div class="ml-2 pt-1 pb-1 pr-2 pl-2 text-center border" style="background-color: #def8e3; border-radius: 5px;">
+                      <h6>{{ calc_unit(product) }}</h6>
+                    </div>
+                  </VCardText>
+                </VCol>
+                <VCol cols="3">
+                  <div class="d-flex justify-end pr-1 mt-1" >
+                    <div class="border">
+                      <VBtn
+                        color="default"
+                        size="x-small"
+                        class="text-high-emphasis ms-n1 mr-3"
+                        style="width: 20px; height: 30px;"
+                        :disabled="!product.cart"
+                        @click="() => { product.cart--; update_cart(product) }"
+                      >
+                        <VIcon
+                          size="22"
+                          icon="tabler-minus"
+                        />
+                      </VBtn>
+                      <span class="mr-4 mt-1">{{product.cart || 0}}</span>
+                      <VBtn
+                        color="default"
+                        size="x-small"
+                        class="text-high-emphasis ms-n1"
+                        style="width: 20px; height: 30px;"
+                        @click="() => { product.cart = (product.cart || 0) + 1; update_cart(product) }"
+                      >
+                        <VIcon
+                          size="22"
+                          icon="tabler-plus"
+                        />
+                      </VBtn>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-end pr-1 mt-1" >
+                    <VBtn
+                      color="default"
+                      size="x-small"
+                      class="text-high-emphasis ms-n1 mt-5"
+                      style="width: 20px; height: 30px;"
+                      @click="() => { removeFromCart(product) }"
+                    >
+                      <VIcon
+                        size="22"
+                        icon="tabler-trash"
+                      />
+                    </VBtn>
+                  </div>
+                </VCol>
+              </VRow>
+              <VDivider />
+            </VCardText>
+          </VCard>
+        </VCard>
+      </VCol>
+      <VCol
+        cols="12"
+        lg="4"
+        sm="12"        
+        relative
+        class="mb-5"
+      >
+        <VCardText>
+          Summary
+        </VCardText>
+        <VCard class="ml-5 mr-5 pl-5 pr-5">
+          <div class="d-flex justify-space-between mt-3 mb-3">
+            <span>Subtotal</span>
+            <span>AED {{ total }}</span>
+          </div>
+          <VDivider />
+          <div class="d-flex justify-space-between mt-3 mb-3">
+            <div>
+              <h4>Grand Total</h4>
+              <span class="text-xs">(Incl Tax)</span>
+            </div>
+            <h4>AED {{ total + Math.round(total * 0.02 * 100) / 100 }}</h4>
+          </div>
+          <div class="d-flex justify-space-between mt-3 mb-3">
+            <span class="text-sm">Tax</span>
+            <span class="text-sm">AED {{ Math.round(total * 0.02 * 100) / 100 }}</span>
+          </div>
+        </VCard>
+        <VCard class="mt-5 ml-5 mr-5 pl-5 pr-5 pt-3 pb-5" style="background-color: #def8e3; border-radius: 5px;">
+            <div class="pt-1 pb-1 text-center" >
+              <h6> You've earned FREE shipping!</h6>
+              <VProgressLinear
+                color="success"
+                model-value="100"
+                height="8"
+              />
+            </div>
+        </VCard>
+        <VCard class="mt-5 ml-5 mr-5">
+          <VBtn class="w-100" color="success">
+            Processed
+          </VBtn>
+        </VCard>
+      </VCol>
+    </VRow>
+  </VCard>
+</template>
+
+<style>
+.supplier-link {
+  display: inline-block;
+
+  /* Ensure link and heading are on the same line */
+  color: blue;
+
+  /* Customize the link color */
+  margin-block-end: 10px;
+
+  /* Adjust spacing as needed */
+}
+
+.header {
+  padding: 20px;
+  text-align: start;
+}
+
+.welcome-container {
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 10%);
+  margin-block: 40px;
+  margin-inline: auto;
+  max-inline-size: 800px;
+}
+</style>
