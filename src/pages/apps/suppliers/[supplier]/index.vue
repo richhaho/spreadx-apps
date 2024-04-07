@@ -239,11 +239,17 @@ function update_cart(product) {
           </VCol>
         </VRow>
       </VCard>
+      <VCard class="banner" v-if="currentSupplier.banners.length">
+        <VCarousel>
+          <VCarouselItem v-for="banner in currentSupplier.banners" :src="banner.image"></VCarouselItem>
+        </VCarousel>
+      </VCard>
       <VCard
         v-for="category in categories"
-        :title="category"
+        :title="JSON.parse(category).name"
         class="mt-5"
       >
+        <VImg :src="JSON.parse(category).image" height="100" class="mb-2 w-100"/>
         <PerfectScrollbar :options="{ wheelPropagation: false, suppressScrollY: true }">
             <div style="width: max-content;" class="pl-3">
               <template v-for="product in products">
@@ -270,7 +276,7 @@ function update_cart(product) {
                         size="x-small"
                         class="text-high-emphasis ms-n1 mr-3"
                         style="width: 20px; height: 30px;"
-                        :disabled="!product.cart"
+                        v-if="product.cart"
                         @click="() => { product.cart--; update_cart(product) }"
                       >
                         <VIcon
@@ -278,7 +284,7 @@ function update_cart(product) {
                           icon="tabler-minus"
                         />
                       </VBtn>
-                      <span class="mr-4 mt-1">{{product.cart || 0}}</span>
+                      <span v-if="product.cart" class="mr-4 mt-1">{{product.cart}}</span>
                       <VBtn
                         color="success"
                         size="x-small"
