@@ -9,7 +9,7 @@ const v1 =
 export const useUiStore = defineStore("useUiStore", () => {
   const qlineUrl = import.meta.env.VITE_API_V1;
   const showCartDetails = ref(false);
-  const cartItems = ref(JSON.parse(localStorage.getItem('cartItems')) ?? []);
+  const cartItems = ref(JSON.parse(localStorage.getItem('cart')) ?? []);
   const currentStep = ref(0);
   const snackbar = ref(false);
   const snackbarColor = ref('success');
