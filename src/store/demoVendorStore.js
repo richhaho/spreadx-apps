@@ -26,6 +26,11 @@ export const useDemoVendorStore = defineStore("useDemoVendorStore", {
       }, 500);
     },
     
+    fetchAllProducts(business_id){
+      axios_lite.get('v1/get_vendors_products?business_id=' + business_id + '&supplier_id=OP8vVIvL').then((response) => {
+        this.products = response.data.products;
+      });
+    },
     fetchProducts(business_id, supplier_id){
       axios_lite.get('v1/get_vendors_products?business_id=' + business_id + '&supplier_id=' + supplier_id).then((response) => {
         this.products = response.data.products;
