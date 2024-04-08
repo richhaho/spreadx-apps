@@ -239,7 +239,7 @@ function update_cart(product) {
           </VCol>
         </VRow>
       </VCard>
-      <VCard class="carousel-size mt-1" v-if="currentSupplier.banners.length">
+      <VCard class="carousel-size mt-1" v-if="currentSupplier.banners && currentSupplier.banners.length">
         <VCarousel>
           <VCarouselItem v-for="banner in currentSupplier.banners" :src="banner.image"></VCarouselItem>
         </VCarousel>
