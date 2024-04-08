@@ -65,43 +65,32 @@ function calc_unit(product) {
         <VCardText>
           Your Items ({{ cart_products.length }})
         </VCardText>
-        <VCard class="ml-5 mr-5">
+        <VCard class="ml-2 mr-2">
           <VCardText>
-            <VRow>
-              <VCol cols="5">
-                <div class="d-flex">
-                  <span class="text-warning text-bold">Shipment</span>
-                </div>
-                <div>Total: AED {{ total }}</div>
-              </VCol>
-              <VCol cols="5">
-                <div class="d-flex justify-end">
-                  <span class="text-sm text-warning">Express Delivery - 90 mins</span>
-                </div>
-                <div class="d-flex justify-end">
-                  <span class="text-sm">Delevery Fee: AED 6</span>
-                </div>
-              </VCol>
-              <VCol cols="2">
-                <VBtn color="warning" size="x-small">
-                  To Express
-                </VBtn>
-              </VCol>
-            </VRow>
+            <div class="d-flex justify-end">
+              <VBtn color="warning" size="x-small">
+                To Express
+              </VBtn>
+            </div>
+            <div class="d-flex justify-space-between">
+              <span class="text-warning text-bold">Shipment</span>
+              <span class="text-sm text-warning">Express Delivery - 90 mins</span>
+            </div>
+            <div class="d-flex justify-space-between">
+            <div>Total: AED {{ total }}</div>
+              <span class="text-sm">Delevery Fee: AED 6</span>
+            </div>
           </VCardText>
           <VCard>
-            <VCardText
-              class="mr-3"
-              v-for="product in cart_products"
-            >
-              <VRow>
-                <VCol cols="2">
+            <VCardText v-for="product in cart_products">
+              <VRow class="mb-2">
+                <VCol md="2" sm="6" cols="12">
                   <VImg
                     class="mt-4 text-center"
                     :src="product.image"
                   />
                 </VCol>
-                <VCol cols="7">
+                <VCol md="7" sm="6" cols="12">
                   <VCardText>
                     <h4>{{ product.name }}</h4>
                     <h5 class="text-error mt-2">AED {{ product.price }}</h5>
@@ -115,7 +104,7 @@ function calc_unit(product) {
                     </div>
                   </VCardText>
                 </VCol>
-                <VCol cols="3">
+                <VCol md="3" sm="12" cols="12">
                   <div class="d-flex justify-end pr-1 mt-1" >
                     <div class="border">
                       <VBtn
@@ -177,7 +166,7 @@ function calc_unit(product) {
         <VCardText>
           Summary
         </VCardText>
-        <VCard class="ml-5 mr-5 pl-5 pr-5">
+        <VCard class="ml-2 mr-2 pl-5 pr-5">
           <div class="d-flex justify-space-between mt-3 mb-3">
             <span>Subtotal</span>
             <span>AED {{ total }}</span>
@@ -195,7 +184,7 @@ function calc_unit(product) {
             <span class="text-sm">AED {{ Math.round(total * 0.02 * 100) / 100 }}</span>
           </div>
         </VCard>
-        <VCard class="mt-5 ml-5 mr-5 pl-5 pr-5 pt-3 pb-5" style="background-color: #def8e3; border-radius: 5px;">
+        <VCard class="mt-5 ml-2 mr-2 pl-5 pr-5 pt-3 pb-5" style="background-color: #def8e3; border-radius: 5px;">
             <div class="pt-1 pb-1 text-center" >
               <h6> You've earned FREE shipping!</h6>
               <VProgressLinear
@@ -205,7 +194,7 @@ function calc_unit(product) {
               />
             </div>
         </VCard>
-        <VCard class="mt-5 ml-5 mr-5">
+        <VCard class="mt-5 ml-2 mr-2">
           <VBtn class="w-100" color="success">
             Processed
           </VBtn>
