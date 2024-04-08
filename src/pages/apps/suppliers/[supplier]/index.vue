@@ -239,9 +239,9 @@ function update_cart(product) {
           </VCol>
         </VRow>
       </VCard>
-      <VCard class="carousel-size mt-1" v-if="currentSupplier.banners && currentSupplier.banners.length">
+      <VCard class="mt-1" v-if="currentSupplier.banners && currentSupplier.banners.length" height="400">
         <VCarousel>
-          <VCarouselItem v-for="banner in currentSupplier.banners" :src="banner.image"></VCarouselItem>
+          <VCarouselItem :cover="false" v-for="banner in currentSupplier.banners" :src="banner.image"></VCarouselItem>
         </VCarousel>
       </VCard>
       <VCard
@@ -362,7 +362,7 @@ function update_cart(product) {
   float: left;
   width: 220px;
 }
-.carousel-size {
+.carousel-item {
   height: 200px;
 }
 .product-name {
