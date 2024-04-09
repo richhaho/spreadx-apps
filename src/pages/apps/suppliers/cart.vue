@@ -48,6 +48,8 @@ function calc_unit(product) {
   })
   return sum ? sum + product.unit_name : ''
 }
+
+const screen_width = window.innerWidth
 </script>
 
 <template>
@@ -66,36 +68,36 @@ function calc_unit(product) {
           Your Items ({{ cart_products.length }})
         </VCardText>
         <VCard class="ml-2 mr-2">
-          <VCardText>
+          <VCardText class="mobile-view">
             <div class="d-flex justify-end">
               <VBtn color="warning" size="x-small">
                 To Express
               </VBtn>
             </div>
             <div class="d-flex justify-space-between">
-              <span class="text-warning text-bold">Shipment</span>
-              <span class="text-sm text-warning">Express Delivery - 90 mins</span>
+              <span class="text-warning text-bold mobile-view">Shipment</span>
+              <span class="text-sm text-warning mobile-view">Express Delivery - 90 mins</span>
             </div>
             <div class="d-flex justify-space-between">
-            <div>Total: AED {{ total }}</div>
-              <span class="text-sm">Delevery Fee: AED 6</span>
+              <div>Total: AED {{ total }}</div>
+              <span class="text-sm mobile-view">Delevery Fee: AED 6</span>
             </div>
           </VCardText>
           <VCard>
-            <VCardText v-for="product in cart_products">
+            <VCardText v-for="product in cart_products" class="mobile-view mobile-card">
               <VRow class="mb-2">
-                <VCol md="2" sm="6" cols="12">
+                <VCol cols="2" class="mobile-view">
                   <VImg
                     class="mt-4 text-center"
                     :src="product.image"
                   />
                 </VCol>
-                <VCol md="7" sm="6" cols="12">
-                  <VCardText>
+                <VCol cols="6">
+                  <VCardText class="mobile-view">
                     <h4>{{ product.name }}</h4>
                     <h5 class="text-error mt-2">AED {{ product.price }}</h5>
                   </VCardText>
-                  <VCardText class="d-flex">
+                  <VCardText class="d-flex mobile-view">
                     <div class="pt-1 pb-1 pr-2 pl-2 text-center border" style="border-radius: 5px;">
                       <h6>UAE</h6>
                     </div>
@@ -104,14 +106,13 @@ function calc_unit(product) {
                     </div>
                   </VCardText>
                 </VCol>
-                <VCol md="3" sm="12" cols="12">
-                  <div class="d-flex justify-end pr-1 mt-1" >
+                <VCol cols="4" class="mobile-view">
+                  <div v-if="screen_width > 420" class="d-flex justify-end pr-1 mt-1 mobile-view">
                     <div class="border">
                       <VBtn
                         color="default"
                         size="x-small"
-                        class="text-high-emphasis ms-n1 mr-3"
-                        style="width: 20px; height: 30px;"
+                        class="text-high-emphasis ms-n1 mr-3 add_cart_btn"
                         :disabled="!product.cart"
                         @click="() => { product.cart--; update_cart(product) }"
                       >
@@ -124,8 +125,7 @@ function calc_unit(product) {
                       <VBtn
                         color="default"
                         size="x-small"
-                        class="text-high-emphasis ms-n1"
-                        style="width: 20px; height: 30px;"
+                        class="text-high-emphasis ms-n1 add_cart_btn"
                         @click="() => { product.cart = (product.cart || 0) + 1; update_cart(product) }"
                       >
                         <VIcon
@@ -135,7 +135,14 @@ function calc_unit(product) {
                       </VBtn>
                     </div>
                   </div>
-                  <div class="d-flex justify-end pr-1 mt-1" >
+                  <div v-else class="d-flex justify-end pr-1 mt-1 mobile-view">
+                    <VSelect
+                      :items="[0,1,2,3,4,5,6,7,8,9,10]"
+                      v-model="product.cart"
+                      @update="update_cart(product)"
+                    />
+                  </div>
+                  <div class="d-flex justify-end pr-1 mt-1 mobile-view" >
                     <VBtn
                       color="default"
                       size="x-small"
@@ -230,4 +237,19 @@ function calc_unit(product) {
   margin-inline: auto;
   max-inline-size: 800px;
 }
+.add_cart_btn {
+  width: 20px; height: 30px;
+}
+@media only screen and (max-width: 600px) {
+  .mobile-view{
+    padding: 0px !important;
+    font-size: x-small !important
+  }
+  .mobile-card {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    margin-top: 14px !important
+  }
+}
+
 </style>
