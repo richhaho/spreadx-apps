@@ -317,7 +317,7 @@ const screen_width = window.innerWidth
           </div>
         </VCard>
         <VCard class="mt-5 ml-2 mr-2">
-          <VBtn class="w-100" color="success">
+          <VBtn class="w-100" color="success" :to="'/apps/suppliers/payment'">
             Pay
           </VBtn>
         </VCard>
