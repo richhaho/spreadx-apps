@@ -3,6 +3,8 @@ import { useUiStore } from '@/store/uiStore';
 const uiStore = useUiStore()
 
 const cart_products = computed(() => uiStore.$state.cartItems)
+const userData = JSON.parse(localStorage.getItem("userData"));
+
 function update_cart(product) {
   const products = JSON.parse(localStorage.getItem('cart') || '[]')
   const index = products.findIndex((item) => item.id === product.id)
@@ -50,6 +52,7 @@ function calc_unit(product) {
 }
 
 const screen_width = window.innerWidth
+
 </script>
 
 <template>
@@ -76,14 +79,14 @@ const screen_width = window.innerWidth
               <VBtn color="primary" size="x-small" class="mt-2 ml-2">Default</VBtn>
             </VCol>
             <VCol cols="7">
-              <h4 class="text-bold mt-2">Ali Mousavi</h4>
-              <p>Villa3, Villa3, Al Rashdiya, Dubai</p>
+              <h4 class="text-bold mt-2">{{ userData.full_name }}</h4>
+              <p>{{ userData.address || 'Villa3, Villa3, Al Rashdiya, Dubai'}}</p>
             </VCol>
             <VCol cols="3">
               <h5 class="mt-2">Phone</h5>
-              <span class="text-sm">+9715055140401</span>
+              <span class="text-sm">{{ userData.phone || '+9715055140401' }}</span>
               <h5>Email</h5>
-              <span class="text-sm">alimousawig@gmail.com</span>
+              <span class="text-sm">{{ userData.email }}</span>
             </VCol>
           </VRow>
         </VCard>
@@ -93,7 +96,7 @@ const screen_width = window.innerWidth
         </div>
         <VCard class="ml-2 mr-2" variant="outlined">
           <VRow>
-            <VCol cols="12" class="d-flex">
+            <VCol cols="12" class="d-flex mobile-slot">
               <VCard class="ml-3 mt-3 pt-1 pb-1 pl-4 pr-4" color="success">
                 <div class="text-center text-sm">09, Apr 24</div>
                 <div class="text-center text-xs mt-1">Tomorrow</div>
@@ -117,7 +120,7 @@ const screen_width = window.innerWidth
             </VCol>
           </VRow>
           <VRow style="background-color: #def8e3;">
-            <VCol cols="12" class="d-flex">
+            <VCol cols="12" class="d-flex mobile-slot">
               <VCard class="ml-3 mb-2 pt-1 pb-1 pl-4 pr-4" color="warning">
                 <div class="text-center text-xs">Breakfast Slot</div>
                 <div class="text-center text-xs mt-1">6:00 AM - 10:00 AM</div>
@@ -356,12 +359,16 @@ const screen_width = window.innerWidth
   width: 20px; height: 30px;
 }
 @media only screen and (max-width: 600px) {
-  
+  .mobile-slot{
+    display: block !important;
+    padding-right: 20px;
+  }  
+  .mobile-view{
+    padding: 0px !important;
+    font-size: small !important
+  }  
 }
-.mobile-view{
-  padding: 0px !important;
-  font-size: small !important
-}
+
 .mobile-card {
   padding-left: 14px !important;
   padding-right: 14px !important;

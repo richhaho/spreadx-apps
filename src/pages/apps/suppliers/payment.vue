@@ -56,9 +56,10 @@ const screen_width = window.innerWidth
   <VCard class="pt-3 pb-3">
     <VRow>
       <VCol
-        cols="6"
+        cols="12"
         lg="4"
-        sm="6"        
+        sm="6"
+        xs="12"      
         relative
         class="mb-5"
       >
@@ -76,9 +77,10 @@ const screen_width = window.innerWidth
         </div>
       </VCol>
       <VCol
-        cols="6"
+        cols="12"
         lg="4"
-        sm="6"        
+        sm="6"
+        xs="12"
         relative
         class="mb-5"
       >

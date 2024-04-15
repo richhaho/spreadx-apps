@@ -1,7 +1,7 @@
 <script setup>
 import { useUiStore } from '@/store/uiStore';
 const uiStore = useUiStore()
-
+const userData = JSON.parse(localStorage.getItem("userData"));
 const cart_products = computed(() => uiStore.$state.cartItems)
 function update_cart(product) {
   const products = JSON.parse(localStorage.getItem('cart') || '[]')
@@ -108,19 +108,19 @@ const screen_width = window.innerWidth
       >
         <VCard class="ml-3 mr-3" color="#eefbf1">
           <div class="d-flex ml-3 mr-3 mt-3">
-            <h4>Ali Mousavi</h4>
+            <h4>{{ userData.full_name }}</h4>
             <VBtn class="ml-3" color="warning" size="x-small"><VIcon icon="tabler-crown"></VIcon>Pro Member</VBtn>
           </div>
           <div class="d-flex justify-space-between mt-5 ml-3 mr-3 mb-3">
-            <div class="d-flex">
+            <div class="d-flex mobile-slot">
               <div class="mr-3 ml-2">
                 <h6 class="text-xs">Email</h6>
-                <h5>Alimousawi@gmail.com</h5>
+                <h5>{{ userData.email }}</h5>
               </div>
               <VDivider vertical />
               <div class="mr-3 ml-2">
                 <h6 class="text-xs">Phone</h6>
-                <h5>+971505140401</h5>
+                <h5>{{ userData.phone || '+9715055140401' }}</h5>
               </div>
               <VDivider vertical />
               <div class="mr-3 ml-2">
@@ -129,12 +129,12 @@ const screen_width = window.innerWidth
               </div>
               <VDivider vertical />
             </div>
-            <VBtn color="success" size="small">Edit Profile</VBtn>
+            <VBtn color="success" size="x-small">Edit Profile</VBtn>
           </div>
         </VCard>
         <VRow class="mt-5">
-          <VCol cols="6">
-            <VCard class="ml-3 pl-3 pr-3 pt-3 pb-5" variant="outlined">
+          <VCol cols="12" sm="6">
+            <VCard class="ml-3 mr-3 pl-3 pr-3 pt-3 pb-5" variant="outlined">
               <VRow class="mb-1">
                 <VCol cols="12" class="mt-5 mb-5">
                   <h4 class="mt-2 text-center">0/3</h4>
@@ -145,24 +145,24 @@ const screen_width = window.innerWidth
               <span class="text-sm">Place 3 orders each above 100 to upgrade to VIP membership</span>
             </VCard>
           </VCol>
-          <VCol cols="6">
-            <VCard class="mr-3 pl-3 pr-3 pt-3 pb-5" image="https://openmaptiles.org/img/home-banner-map.png" variant="outlined">
+          <VCol cols="12" sm="6">
+            <VCard class="mr-3 ml-3 pl-3 pr-3 pt-3 pb-5" image="https://openmaptiles.org/img/home-banner-map.png" variant="outlined">
               <VRow>
                 <VCol cols="12">
                   <VBtn color="primary" size="x-small" class="mt-2 ml-2">Default</VBtn>
                 </VCol>
                 <VCol cols="12">
-                  <h4 class="text-bold mt-2">Ali Mousavi</h4>
-                  <p>Villa3, Villa3, Al Rashdiya, Dubai</p>
+                  <h4 class="text-bold mt-2">{{ userData.full_name }}</h4>
+                  <p>{{ userData.address || 'Villa3, Villa3, Al Rashdiya, Dubai'}}</p>
                 </VCol>
               </VRow>
               <div class="d-flex justify-space-between">
                 <h5 class="mt-2">Phone</h5>
-                <span class="text-sm">+9715055140401</span>
+                <span class="text-sm">{{ userData.phone || '+9715055140401' }}</span>
               </div>
               <div class="d-flex justify-space-between">
                 <h5>Email</h5>
-                <span class="text-sm">alimousawig@gmail.com</span>
+                <span class="text-sm">{{ userData.email }}</span>
               </div>
             </VCard>
           </VCol>
@@ -171,8 +171,8 @@ const screen_width = window.innerWidth
           <h4>Recent Orders</h4>
           <span class="text-sm">Show All</span>
         </div>
-        <VCard class="ml-3 mr-3 pl-3 pr-3 pt-3 pb-5" variant="outlined">
-          <table class="table table-default w-100">
+        <VCard class="ml-3 mr-3 pl-3 pr-3 pt-3 pb-5 mobile-scroll" variant="outlined">
+          <table class="table table-default w-100 mobile-view">
             <thead>
               <tr>
                 <th>ORDER ID<VDivider/></th>
@@ -229,7 +229,16 @@ const screen_width = window.innerWidth
   width: 20px; height: 30px;
 }
 @media only screen and (max-width: 600px) {
-  
+  .mobile-slot{
+    display: block !important;
+    padding-right: 20px;
+  }
+  .mobile-view{
+    width: 450px !important;
+  }
+  .mobile-scroll {
+    overflow-x: auto;
+  }
 }
 .mobile-view{
   padding: 0px !important;
