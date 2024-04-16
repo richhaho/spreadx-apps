@@ -1,55 +1,16 @@
 <script setup>
+import { useDemoVendorStore } from '@/store/demoVendorStore';
 import { useUiStore } from '@/store/uiStore';
 const uiStore = useUiStore()
+const demoVendorStore = useDemoVendorStore();
+
+const userData = JSON.parse(localStorage.getItem("userData"));
+const business_id = userData.business.id
+
+demoVendorStore.fetchOrders(business_id)
+const orders = computed(() => demoVendorStore.$state.orders)
 
 const cart_products = computed(() => uiStore.$state.cartItems)
-function update_cart(product) {
-  const products = JSON.parse(localStorage.getItem('cart') || '[]')
-  const index = products.findIndex((item) => item.id === product.id)
-  if (index < 0) {
-    products.push(product)
-  } else if (!product.cart) {
-    products.splice(index, 1)
-  } else {
-    products.splice(index, 1, product)
-  }
-  localStorage.setItem('cart', JSON.stringify(products))
-  uiStore.$state.cartItems = products
-}
-
-function removeFromCart(product) {
-  const products = JSON.parse(localStorage.getItem('cart') || '[]')
-  const index = products.findIndex((item) => item.id === product.id)
-  if (index < 0) {
-    return
-  } else {
-    products.splice(index, 1)
-  }
-  localStorage.setItem('cart', JSON.stringify(products))
-  uiStore.$state.cartItems = products
-}
-
-function get_total() {
-  const products = uiStore.$state.cartItems
-  let sum = 0;
-  products.forEach((item) => {
-    sum = sum + item.price * item.cart
-  })
-  return sum
-}
-
-const total = computed(() => get_total())
-
-function calc_unit(product) {
-  const stock = JSON.parse(product.stock) || []
-  let sum;
-  stock.forEach((item) => {
-    sum = item.weight
-  })
-  return sum ? sum + product.unit_name : ''
-}
-
-const screen_width = window.innerWidth
 </script>
 
 <template>
@@ -107,11 +68,11 @@ const screen_width = window.innerWidth
         lg="9"
       >
         <div class="d-flex justify-space-between ml-3 mr-3 mb-1">
-          <h4>Orders ({{ cart_products.length || 0 }})</h4>
+          <h4>Orders ({{ orders.length || 0 }})</h4>
         </div>
-        <VCard v-for="a in 2" class=" mt-2 ml-2 mr-2 border">
+        <VCard v-for="order in orders" class=" mt-2 ml-2 mr-2 border">
           <div class="d-flex justify-space-between mt-2 ml-2 mr-3 mb-1">
-            <h5 class="text-success">Order 3581316 (Qty: 6)</h5>
+            <h5 class="text-success">Order {{ order.number }} (Qty: {{order.qty}})</h5>
             <span class="text-xs">Placed On Apr 08, 2024</span>
           </div>
           <div class="d-flex justify-space-between mt-1 ml-2 mr-3 mb-1">
