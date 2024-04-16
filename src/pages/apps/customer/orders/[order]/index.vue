@@ -1,7 +1,7 @@
 <script setup>
 import { useUiStore } from '@/store/uiStore';
 const uiStore = useUiStore()
-
+const userData = JSON.parse(localStorage.getItem("userData"));
 const cart_products = computed(() => uiStore.$state.cartItems)
 function update_cart(product) {
   const products = JSON.parse(localStorage.getItem('cart') || '[]')
@@ -138,7 +138,7 @@ const screen_width = window.innerWidth
         </div>
         <VCard class="ml-3 mr-3 pt-3 pb-4" variant="outlined">
           <VRow>
-            <VCol cols="4">
+            <VCol cols="12" sm="4">
               <div class="d-flex ml-3 mr-3 mt-3">
                 <VIcon icon="tabler-calendar" size="30" color="success" />
                 <div class="ml-3">
@@ -148,7 +148,7 @@ const screen_width = window.innerWidth
               </div>
             </VCol>
             <VDivider vertical />
-            <VCol cols="8">
+            <VCol cols="12" sm="8">
               <div class="d-flex ml-3 mr-3 mt-3">
                 <VIcon icon="tabler-clock" size="30" color="success" />
                 <div class="ml-3">
@@ -163,8 +163,8 @@ const screen_width = window.innerWidth
           <h4>Delivery Instructions / Gift Message</h4>
         </div>
         <VCard class="ml-3 mr-3 pt-3 pb-3" variant="outlined">
-          <div class="d-flex ml-3 mr-3">
-            <VRadio class="text-success" label="Call before delivery" />
+          <div class="d-flex ml-3 mr-3 mobile-slot">
+            <VRadio class="text-success ml-2" label="Call before delivery" />
             <VRadio class="text-success ml-2" label="Return Barakat boxes" />
             <VRadio class="text-success ml-2" label="Leave at the door" />
           </div>
@@ -173,25 +173,25 @@ const screen_width = window.innerWidth
           <h4>Delivery Address</h4>
         </div>
         <VCard class="ml-2 mr-2" image="https://openmaptiles.org/img/home-banner-map.png" variant="outlined">
-          <VRow>
-            <VCol cols="2">
-              <VBtn color="primary" size="x-small" class="mt-2 ml-2">Default</VBtn>
+          <VRow class="ml-1">
+            <VCol cols="12" sm="2">
+              <VBtn color="primary" size="x-small" class="mt-2">Default</VBtn>
             </VCol>
-            <VCol cols="7">
-              <h4 class="text-bold mt-2">Ali Mousavi</h4>
-              <p>Villa3, Villa3, Al Rashdiya, Dubai</p>
+            <VCol cols="12" sm="7">
+              <h4 class="text-bold mt-2">{{ userData.full_name }}</h4>
+              <p>{{ userData.address || 'Villa3, Villa3, Al Rashdiya, Dubai'}}</p>
             </VCol>
-            <VCol cols="3">
+            <VCol cols="12" sm="3">
               <h5 class="mt-2">Phone</h5>
-              <span class="text-sm">+9715055140401</span>
+              <span class="text-sm">{{ userData.phone || '+9715055140401' }}</span>
               <h5>Email</h5>
-              <span class="text-sm">alimousawig@gmail.com</span>
+              <span class="text-sm">{{ userData.email }}</span>
             </VCol>
           </VRow>
         </VCard>
 
         <VRow class="mt-5">
-          <VCol cols="7">
+          <VCol cols="12" sm="7">
             <div class="d-flex justify-space-between mt-3 ml-3 mr-3 mb-1">
               <h4>Your Items</h4>
             </div>
@@ -217,7 +217,7 @@ const screen_width = window.innerWidth
               </VCard>
             </VCard>
           </VCol>
-          <VCol cols="5">
+          <VCol cols="12" sm="5">
             <div class="d-flex justify-space-between mt-5 ml-3 mr-3 mb-1">
               <h4>Order totals</h4>
             </div>
@@ -299,7 +299,10 @@ const screen_width = window.innerWidth
   width: 20px; height: 30px;
 }
 @media only screen and (max-width: 600px) {
-  
+  .mobile-slot{
+    display: block !important;
+    padding-right: 20px;
+  }
 }
 .mobile-view{
   padding: 0px !important;
