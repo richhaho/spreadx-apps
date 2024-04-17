@@ -8,7 +8,8 @@ const userData = JSON.parse(localStorage.getItem("userData"));
 const business_id = userData.business.id
 
 demoVendorStore.fetchOrders(business_id)
-const orders = computed(() => demoVendorStore.$state.orders)
+const orderData = computed(() => demoVendorStore.$state.orders)
+const orders = computed(() => orderData.value.length > 0 ? orderData.value[0].order_list : [])
 
 const cart_products = computed(() => uiStore.$state.cartItems)
 </script>
@@ -72,30 +73,30 @@ const cart_products = computed(() => uiStore.$state.cartItems)
         </div>
         <VCard v-for="order in orders" class=" mt-2 ml-2 mr-2 border">
           <div class="d-flex justify-space-between mt-2 ml-2 mr-3 mb-1">
-            <h5 class="text-success">Order {{ order.number }} (Qty: {{order.qty}})</h5>
-            <span class="text-xs">Placed On Apr 08, 2024</span>
+            <h5 class="text-success">Order {{ order.invoice_no }} (Qty: {{order.order_details.length || 0}})</h5>
+            <span class="text-xs">Placed On {{ order.order_date}}</span>
           </div>
           <div class="d-flex justify-space-between mt-1 ml-2 mr-3 mb-1">
-            <span class="text-xs">Charged amount: AED 39.8542</span>
-            <span class="text-xs text-primary">Status: Confirmed</span>
+            <span class="text-xs">Charged amount: AED {{ order.grand_total }}</span>
+            <span class="text-xs text-primary">Status: {{ order.status }}</span>
           </div>
           <VDivider />
           <div class="d-flex justify-space-between mt-1 ml-2 mr-3 mb-5" style="overflow-x: scroll;">
             <div style="width: max-content;" class="pl-3">
-              <VCard v-for="product in cart_products" class="mobile-view mobile-card ml-2" style="float: left; width: 250px; height: 100px;">
+              <VCard v-for="product in order.order_details" class="mobile-view mobile-card ml-2" style="float: left; width: 250px; height: 100px;">
                 <VRow class="mb-2 pt-3 pb-3">
                   <VCol cols="2" class="mobile-view">
-                    <VBtn variant="tonal" size="xx-small" color="success">x{{ product.cart }}</VBtn>
+                    <VBtn variant="tonal" size="xx-small" color="success">x{{ product.qty }}</VBtn>
                     <VImg
                       :src="product.image"
                     />
                   </VCol>
                   <VCol cols="10">
                     <div class="mobile-view product-name">
-                      <h4>{{ product.name }}</h4>
+                      <h4>{{ product.product_name }}</h4>
                     </div>
                     <div class="d-flex justify-space-between">
-                      <h5 class="text-error mt-2">AED {{ product.price }}</h5>
+                      <h5 class="text-error mt-2">AED {{ product.total_amount }}</h5>
                       <VBtn color="success" size="x-small">90mins</VBtn>
                     </div>
                   </VCol>
