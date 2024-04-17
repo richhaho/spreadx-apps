@@ -1,7 +1,10 @@
 <script setup>
 import { useUiStore } from '@/store/uiStore';
+import { useRoute } from 'vue-router';
+const route = useRoute()
 const uiStore = useUiStore()
 const userData = JSON.parse(localStorage.getItem("userData"));
+const supplier_id = route.params.supplier
 const cart_products = computed(() => uiStore.$state.cartItems)
 function update_cart(product) {
   const products = JSON.parse(localStorage.getItem('cart') || '[]')
@@ -70,32 +73,32 @@ const screen_width = window.innerWidth
         <VListItem
           prepend-icon="tabler-home"
           title="Dashboard"
-          :to="`/apps/customer/dashboard`"
+          :to="`/apps/suppliers/${supplier_id}/customer/dashboard`"
         />
         <VListItem
           prepend-icon="tabler-user"
           title="Profile"
-          :to="`/apps/customer/profile`"
+          :to="`/apps/suppliers/${supplier_id}/customer/profile`"
         />
         <VListItem
           prepend-icon="tabler-map"
           title="Addresses"
-          :to="`/apps/customer/address`"
+          :to="`/apps/suppliers/${supplier_id}/customer/address`"
         />
         <VListItem
           prepend-icon="tabler-list"
           title="Orders"
-          :to="`/apps/customer/orders`"
+          :to="`/apps/suppliers/${supplier_id}/customer/orders`"
         />
         <VListItem
           prepend-icon="tabler-adjustments"
           title="Rewards"
-          :to="`/apps/customer/rewards`"
+          :to="`/apps/suppliers/${supplier_id}/customer/rewards`"
         />
         <VListItem
           prepend-icon="tabler-credit-card"
           title="Payments"
-          :to="`/apps/customer/payments`"
+          :to="`/apps/suppliers/${supplier_id}/customer/payments`"
         />        
       </VList>
     </VCol>

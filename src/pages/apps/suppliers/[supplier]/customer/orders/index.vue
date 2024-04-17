@@ -1,17 +1,51 @@
 <script setup>
 import { useDemoVendorStore } from '@/store/demoVendorStore';
 import { useUiStore } from '@/store/uiStore';
+import { useRoute } from 'vue-router';
+const route = useRoute()
 const uiStore = useUiStore()
 const demoVendorStore = useDemoVendorStore();
 
 const userData = JSON.parse(localStorage.getItem("userData"));
 const business_id = userData.business.id
+const supplier_id = route.params.supplier
 
-demoVendorStore.fetchOrders(business_id)
+demoVendorStore.fetchOrders(business_id, supplier_id)
 const orderData = computed(() => demoVendorStore.$state.orders)
 const orders = computed(() => orderData.value.length > 0 ? orderData.value[0].order_list : [])
 
-const cart_products = computed(() => uiStore.$state.cartItems)
+function reOrder(order) {
+  const product_ids = []
+  const prices = []
+  const qtys = []
+  const units = []
+  order.order_details.forEach(product => {
+    product_ids.push(product.product_id)
+    prices.push(product.total_amount)
+    qtys.push(product.qty)
+    units.push(product.unit_id)
+  })
+  const payload = {
+    "customer_name": userData.full_name,
+    "customer_email": userData.email,
+    "address": userData.address,
+    "notes": '',
+    "product_id": product_ids.join(','),
+    "qty": qtys.join(','),
+    "price": prices.join(','),
+    "batch_no": ",,",
+    "unit": units.join(','),
+    "supplier_id": supplier_id,
+    "delivery_slot_id": 0,
+    "business_id": business_id
+    }
+  demoVendorStore.storeOrder(business_id, payload)
+}
+
+function toOrderDetail(order) {
+  localStorage.setItem("orderDetail", JSON.stringify(order));
+}
+
 </script>
 
 <template>
@@ -32,32 +66,32 @@ const cart_products = computed(() => uiStore.$state.cartItems)
         <VListItem
           prepend-icon="tabler-home"
           title="Dashboard"
-          :to="`/apps/customer/dashboard`"
+          :to="`/apps/suppliers/${supplier_id}/customer/dashboard`"
         />
         <VListItem
           prepend-icon="tabler-user"
           title="Profile"
-          :to="`/apps/customer/profile`"
+          :to="`/apps/suppliers/${supplier_id}/customer/profile`"
         />
         <VListItem
           prepend-icon="tabler-map"
           title="Addresses"
-          :to="`/apps/customer/address`"
+          :to="`/apps/suppliers/${supplier_id}/customer/address`"
         />
         <VListItem
           prepend-icon="tabler-list"
           title="Orders"
-          :to="`/apps/customer/orders`"
+          :to="`/apps/suppliers/${supplier_id}/customer/orders`"
         />
         <VListItem
           prepend-icon="tabler-adjustments"
           title="Rewards"
-          :to="`/apps/customer/rewards`"
+          :to="`/apps/suppliers/${supplier_id}/customer/rewards`"
         />
         <VListItem
           prepend-icon="tabler-credit-card"
           title="Payments"
-          :to="`/apps/customer/payments`"
+          :to="`/apps/suppliers/${supplier_id}/customer/payments`"
         />        
       </VList>
     </VCol>
@@ -105,8 +139,8 @@ const cart_products = computed(() => uiStore.$state.cartItems)
             </div>
           </div>
           <div class="d-flex justify-end mt-1 ml-2 mr-3 mb-3">
-            <VBtn color="success" variant="outlined" size="small">Reorder</VBtn>
-            <VBtn color="success" size="small" class="ml-1" :to="`/apps/customer/orders/3581316`">Details</VBtn>
+            <VBtn color="success" variant="outlined" size="small" @click="reOrder(order)">Reorder</VBtn>
+            <VBtn color="success" size="small" class="ml-1" @click="toOrderDetail(order)" :to="`/apps/suppliers/${supplier_id}/customer/orders/${order.reference_no}`">Details</VBtn>
           </div>
         </VCard>
       </VCol>
