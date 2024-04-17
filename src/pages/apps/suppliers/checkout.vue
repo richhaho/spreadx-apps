@@ -1,35 +1,12 @@
 <script setup>
+import { useDemoVendorStore } from '@/store/demoVendorStore';
 import { useUiStore } from '@/store/uiStore';
 const uiStore = useUiStore()
+const demoVendorStore = useDemoVendorStore();
 
 const cart_products = computed(() => uiStore.$state.cartItems)
 const userData = JSON.parse(localStorage.getItem("userData"));
-
-function update_cart(product) {
-  const products = JSON.parse(localStorage.getItem('cart') || '[]')
-  const index = products.findIndex((item) => item.id === product.id)
-  if (index < 0) {
-    products.push(product)
-  } else if (!product.cart) {
-    products.splice(index, 1)
-  } else {
-    products.splice(index, 1, product)
-  }
-  localStorage.setItem('cart', JSON.stringify(products))
-  uiStore.$state.cartItems = products
-}
-
-function removeFromCart(product) {
-  const products = JSON.parse(localStorage.getItem('cart') || '[]')
-  const index = products.findIndex((item) => item.id === product.id)
-  if (index < 0) {
-    return
-  } else {
-    products.splice(index, 1)
-  }
-  localStorage.setItem('cart', JSON.stringify(products))
-  uiStore.$state.cartItems = products
-}
+const business_id = userData.business.id
 
 function get_total() {
   const products = uiStore.$state.cartItems
@@ -42,16 +19,35 @@ function get_total() {
 
 const total = computed(() => get_total())
 
-function calc_unit(product) {
-  const stock = JSON.parse(product.stock) || []
-  let sum;
-  stock.forEach((item) => {
-    sum = item.weight
+function orderNow() {
+  const product_ids = []
+  const prices = []
+  const qtys = []
+  const units = []
+  let supplier = 'XhabUF4C'
+  cart_products.value.forEach(product => {
+    product_ids.push(product.product_id)
+    prices.push(product.price)
+    qtys.push(product.cart)
+    units.push(product.unit_id)
+    supplier = product.get_supplier_details.auth_id || supplier
   })
-  return sum ? sum + product.unit_name : ''
+  const payload = {
+    "customer_name": userData.full_name,
+    "customer_email": userData.email,
+    "address": userData.address,
+    "notes": '',
+    "product_id": product_ids.join(','),
+    "qty": qtys.join(','),
+    "price": prices.join(','),
+    "batch_no": ",,",
+    "unit": units.join(','),
+    "supplier_id": supplier,
+    "delivery_slot_id": 0,
+    "business_id": business_id
+    }
+  demoVendorStore.storeOrder(business_id, payload)
 }
-
-const screen_width = window.innerWidth
 
 </script>
 
@@ -320,7 +316,7 @@ const screen_width = window.innerWidth
           </div>
         </VCard>
         <VCard class="mt-5 ml-2 mr-2">
-          <VBtn class="w-100" color="success" :to="'/apps/suppliers/payment'">
+          <VBtn class="w-100" color="success" :to="'/apps/suppliers/payment'" @click="orderNow()">
             Pay
           </VBtn>
         </VCard>

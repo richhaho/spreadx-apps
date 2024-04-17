@@ -6,6 +6,7 @@ const authAccessToken = import.meta.env.VITE_AUTH_TOKEN_TANAF
 export const useDemoVendorStore = defineStore("useDemoVendorStore", {
   state: () => ({
     products: ref([]),
+    orders: ref([]),
     promotions: ref([]),
     account_receipt_note: ref([]),
     isAccountReceiptSaving : ref(false),
@@ -26,6 +27,31 @@ export const useDemoVendorStore = defineStore("useDemoVendorStore", {
       }, 500);
     },
     
+    storeOrder(business_id, payload){
+      /* payload format
+      {
+        "customer_name": "bot#65f2e1f2234a5",
+        "customer_email": "seyedaliakbar577@gmail.com",
+        "address": "dsds",
+        "notes": null,
+        "product_id": "5226,5225,5223",
+        "qty": "1,1,1",
+        "price": "57,57,115",
+        "batch_no": ",,",
+        "unit": "63,63,63",
+        "supplier_id": "XhabUF4C",
+        "delivery_slot_id": 0,
+        "business_id": "52"
+        }
+      */
+        
+      axios_lite.post('v1/store_order?business_id=' + business_id, payload)
+    },
+    fetchOrders(business_id, supplier_id = '3GTAbmAx'){
+      axios_lite.get('v1/get_store_order?business_id=' + business_id + '&supplier_id=' + supplier_id).then((response) => {
+        this.orders = response.data.orders;
+      });
+    },
     fetchAllProducts(business_id){
       axios_lite.get('v1/get_vendors_products?business_id=' + business_id + '&supplier_id=OP8vVIvL').then((response) => {
         this.products = response.data.products;

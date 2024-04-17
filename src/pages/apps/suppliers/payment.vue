@@ -3,32 +3,6 @@ import { useUiStore } from '@/store/uiStore';
 const uiStore = useUiStore()
 
 const cart_products = computed(() => uiStore.$state.cartItems)
-function update_cart(product) {
-  const products = JSON.parse(localStorage.getItem('cart') || '[]')
-  const index = products.findIndex((item) => item.id === product.id)
-  if (index < 0) {
-    products.push(product)
-  } else if (!product.cart) {
-    products.splice(index, 1)
-  } else {
-    products.splice(index, 1, product)
-  }
-  localStorage.setItem('cart', JSON.stringify(products))
-  uiStore.$state.cartItems = products
-}
-
-function removeFromCart(product) {
-  const products = JSON.parse(localStorage.getItem('cart') || '[]')
-  const index = products.findIndex((item) => item.id === product.id)
-  if (index < 0) {
-    return
-  } else {
-    products.splice(index, 1)
-  }
-  localStorage.setItem('cart', JSON.stringify(products))
-  uiStore.$state.cartItems = products
-}
-
 function get_total() {
   const products = uiStore.$state.cartItems
   let sum = 0;
@@ -39,17 +13,6 @@ function get_total() {
 }
 
 const total = computed(() => get_total())
-
-function calc_unit(product) {
-  const stock = JSON.parse(product.stock) || []
-  let sum;
-  stock.forEach((item) => {
-    sum = item.weight
-  })
-  return sum ? sum + product.unit_name : ''
-}
-
-const screen_width = window.innerWidth
 </script>
 
 <template>
