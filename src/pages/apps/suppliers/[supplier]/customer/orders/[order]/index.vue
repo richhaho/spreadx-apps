@@ -1,33 +1,12 @@
 <script setup>
 import { useUiStore } from '@/store/uiStore';
+import { useRoute } from 'vue-router';
+const route = useRoute()
 const uiStore = useUiStore()
+const supplier_id = route.params.supplier
 const userData = JSON.parse(localStorage.getItem("userData"));
+const order = JSON.parse(localStorage.getItem("orderDetail"));
 const cart_products = computed(() => uiStore.$state.cartItems)
-function update_cart(product) {
-  const products = JSON.parse(localStorage.getItem('cart') || '[]')
-  const index = products.findIndex((item) => item.id === product.id)
-  if (index < 0) {
-    products.push(product)
-  } else if (!product.cart) {
-    products.splice(index, 1)
-  } else {
-    products.splice(index, 1, product)
-  }
-  localStorage.setItem('cart', JSON.stringify(products))
-  uiStore.$state.cartItems = products
-}
-
-function removeFromCart(product) {
-  const products = JSON.parse(localStorage.getItem('cart') || '[]')
-  const index = products.findIndex((item) => item.id === product.id)
-  if (index < 0) {
-    return
-  } else {
-    products.splice(index, 1)
-  }
-  localStorage.setItem('cart', JSON.stringify(products))
-  uiStore.$state.cartItems = products
-}
 
 function get_total() {
   const products = uiStore.$state.cartItems
@@ -39,17 +18,33 @@ function get_total() {
 }
 
 const total = computed(() => get_total())
-
-function calc_unit(product) {
-  const stock = JSON.parse(product.stock) || []
-  let sum;
-  stock.forEach((item) => {
-    sum = item.weight
+function reOrder(order) {
+  const product_ids = []
+  const prices = []
+  const qtys = []
+  const units = []
+  order.order_details.forEach(product => {
+    product_ids.push(product.product_id)
+    prices.push(product.total_amount)
+    qtys.push(product.qty)
+    units.push(product.unit_id)
   })
-  return sum ? sum + product.unit_name : ''
+  const payload = {
+    "customer_name": userData.full_name,
+    "customer_email": userData.email,
+    "address": userData.address,
+    "notes": '',
+    "product_id": product_ids.join(','),
+    "qty": qtys.join(','),
+    "price": prices.join(','),
+    "batch_no": ",,",
+    "unit": units.join(','),
+    "supplier_id": supplier_id,
+    "delivery_slot_id": 0,
+    "business_id": business_id
+    }
+  demoVendorStore.storeOrder(business_id, payload)
 }
-
-const screen_width = window.innerWidth
 </script>
 
 <template>
@@ -70,32 +65,32 @@ const screen_width = window.innerWidth
         <VListItem
           prepend-icon="tabler-home"
           title="Dashboard"
-          :to="`/apps/customer/dashboard`"
+          :to="`/apps/suppliers/${supplier_id}/customer/dashboard`"
         />
         <VListItem
           prepend-icon="tabler-user"
           title="Profile"
-          :to="`/apps/customer/profile`"
+          :to="`/apps/suppliers/${supplier_id}/customer/profile`"
         />
         <VListItem
           prepend-icon="tabler-map"
           title="Addresses"
-          :to="`/apps/customer/address`"
+          :to="`/apps/suppliers/${supplier_id}/customer/address`"
         />
         <VListItem
           prepend-icon="tabler-list"
           title="Orders"
-          :to="`/apps/customer/orders`"
+          :to="`/apps/suppliers/${supplier_id}/customer/orders`"
         />
         <VListItem
           prepend-icon="tabler-adjustments"
           title="Rewards"
-          :to="`/apps/customer/rewards`"
+          :to="`/apps/suppliers/${supplier_id}/customer/rewards`"
         />
         <VListItem
           prepend-icon="tabler-credit-card"
           title="Payments"
-          :to="`/apps/customer/payments`"
+          :to="`/apps/suppliers/${supplier_id}/customer/payments`"
         />        
       </VList>
     </VCol>
@@ -108,10 +103,10 @@ const screen_width = window.innerWidth
       >
         <div class="d-flex justify-space-between ml-3 mr-3 mb-1">
           <div>
-            <h4>Order# 3581316</h4>
-            <span class="text-sm">Placed On Apr 08, 2024 03:57</span>
+            <h4>Order# {{order.invoice_no}}</h4>
+            <span class="text-sm">Placed On {{order.order_date}}</span>
           </div>
-          <VBtn color="success" size="small">Reorder</VBtn>
+          <VBtn color="success" size="small" @click="reOrder(order)">Reorder</VBtn>
         </div>
         <div class="d-flex mt-5 ml-3 mr-3 mb-1">
           <h4>Order Status</h4>
@@ -122,8 +117,8 @@ const screen_width = window.innerWidth
             <span class="text-xs">status</span>
           </div>
           <div class="d-flex justify-space-between ml-3 mr-3 mb-1">
-            <h5>Apr 08, 2024</h5>
-            <h5>Confirmed</h5>
+            <h5>{{ order.delivery_date }}</h5>
+            <h5>{{ order.status }}</h5>
           </div>
             <VCardText>
             <VProgressLinear
@@ -143,7 +138,7 @@ const screen_width = window.innerWidth
                 <VIcon icon="tabler-calendar" size="30" color="success" />
                 <div class="ml-3">
                   <h6 class="text-xs">Delivery Slot</h6>
-                  <h5>Mon 08 Apr, 2024</h5>
+                  <h5>{{ order.delivery_date }}</h5>
                 </div>
               </div>
             </VCol>
@@ -197,18 +192,18 @@ const screen_width = window.innerWidth
             </div>
             <VCard class="ml-2 mr-2" color="#eefbf1">
               <VCard>
-                <VCardText v-for="product in cart_products" class="mobile-view mobile-card">
+                <VCardText v-for="product in order.order_details" class="mobile-view mobile-card">
                   <VRow class="mb-2 pt-3 pb-3">
                     <VCol cols="2" class="mobile-view">
-                      <VBtn variant="tonal" size="xx-small" color="success">x{{ product.cart }}</VBtn>
+                      <VBtn variant="tonal" size="xx-small" color="success">x{{ product.qty }}</VBtn>
                       <VImg
                         :src="product.image"
                       />
                     </VCol>
                     <VCol cols="10">
                       <VCardText class="mobile-view">
-                        <h4>{{ product.name }}</h4>
-                        <h5 class="text-error mt-2">AED {{ product.price }}</h5>
+                        <h4>{{ product.product_name }}</h4>
+                        <h5 class="text-error mt-2">AED {{ product.total_amount }}</h5>
                       </VCardText>
                     </VCol>
                   </VRow>
@@ -224,7 +219,7 @@ const screen_width = window.innerWidth
             <VCard class="ml-2 mr-2 pl-5 pr-5">
               <div class="d-flex justify-space-between mt-3 mb-3 text-sm">
                 <span>Subtotal</span>
-                <span>AED {{ total }}</span>
+                <span>AED {{ order.net_total }}</span>
               </div>
               <div class="d-flex justify-space-between mt-3 mb-3 text-error text-xs">
                 <span>You Earn</span>
@@ -248,11 +243,11 @@ const screen_width = window.innerWidth
                   <h4>Grand Total</h4>
                   <span class="text-xs">(Inclusive all VAT)</span>
                 </div>
-                <h4>AED {{ total + Math.round(total * 0.02 * 100) / 100 }}</h4>
+                <h4>AED {{ order.grand_total }}</h4>
               </div>
               <div class="d-flex justify-space-between mt-3 mb-3">
                 <span class="text-sm">Tax</span>
-                <span class="text-sm">AED {{ Math.round(total * 0.02 * 100) / 100 }}</span>
+                <span class="text-sm">AED {{ order.vat_total }}</span>
               </div>
             </VCard>
             <VCard class="d-flex mt-5 ml-2 mr-2 pl-3 pr-3 pt-3 pb-3" color="#f4f3f3">
