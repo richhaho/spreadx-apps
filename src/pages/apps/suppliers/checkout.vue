@@ -1,8 +1,10 @@
 <script setup>
 import { useDemoVendorStore } from '@/store/demoVendorStore';
 import { useUiStore } from '@/store/uiStore';
+import { useRouter } from 'vue-router';
 const uiStore = useUiStore()
 const demoVendorStore = useDemoVendorStore();
+const router = useRouter();
 
 const cart_products = computed(() => uiStore.$state.cartItems)
 const userData = JSON.parse(localStorage.getItem("userData"));
@@ -19,7 +21,7 @@ function get_total() {
 
 const total = computed(() => get_total())
 
-function orderNow() {
+async function orderNow() {
   const product_ids = []
   const prices = []
   const qtys = []
@@ -46,7 +48,8 @@ function orderNow() {
     "delivery_slot_id": 0,
     "business_id": business_id
     }
-  demoVendorStore.storeOrder(business_id, payload)
+  await demoVendorStore.storeOrder(business_id, payload)
+  setTimeout(() => { router.push('/apps/suppliers/payment') }, 2500)
 }
 
 </script>
@@ -316,7 +319,7 @@ function orderNow() {
           </div>
         </VCard>
         <VCard class="mt-5 ml-2 mr-2">
-          <VBtn class="w-100" color="success" :to="'/apps/suppliers/payment'" @click="orderNow()">
+          <VBtn class="w-100" color="success" @click="orderNow()">
             Pay
           </VBtn>
         </VCard>

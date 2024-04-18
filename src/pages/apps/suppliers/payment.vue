@@ -1,18 +1,11 @@
 <script setup>
 import { useUiStore } from '@/store/uiStore';
 const uiStore = useUiStore()
-
-const cart_products = computed(() => uiStore.$state.cartItems)
-function get_total() {
-  const products = uiStore.$state.cartItems
-  let sum = 0;
-  products.forEach((item) => {
-    sum = sum + item.price * item.cart
-  })
-  return sum
+const order = JSON.parse(localStorage.getItem("orderDetail"));
+const userData = JSON.parse(localStorage.getItem("userData"));
+function copyToClipboard(data) {
+  navigator.clipboard.writeText(data);
 }
-
-const total = computed(() => get_total())
 </script>
 
 <template>
@@ -50,8 +43,8 @@ const total = computed(() => get_total())
         <VCard class="ml-2 mr-2 pl-3 pr-3 pt-3 pb-3 mt-5" color="#def8e3">
           <div class="d-flex justify-space-between align-center">
             <div>
-              <h5 class="ml-1">#3581316</h5>
-              <h4 class="ml-1">AED {{ total }}</h4>
+              <h5 class="ml-1">#{{ order.invoice_no }}</h5>
+              <h4 class="ml-1">AED {{ Math.round(order.grand_total * 100)/100 }}</h4>
             </div>
             <VBtn color="success" size="small">Details</VBtn>
           </div>
@@ -60,7 +53,7 @@ const total = computed(() => get_total())
           <div class="d-flex justify-space-between align-center">
             <div>
               <span class="ml-1 text-xs">Delivery Timeslot</span>
-              <h6 class="ml-1">2024-04-08</h6>
+              <h6 class="ml-1">{{ order.delivery_date }}</h6>
               <h6 class="ml-1">Express Delivery - 90 mins</h6>
             </div>
             <VBtn color="success" size="small">Details</VBtn>
@@ -68,7 +61,7 @@ const total = computed(() => get_total())
         </VCard>
         <div class="d-flex justify-space-between mt-5 pt-5 ml-3 mr-3 mb-1">
           <span class="text-sm">Your Items</span>
-          <h5>{{cart_products.length || 0 }}</h5>
+          <h5>{{ order.item_count || 0 }}</h5>
         </div>
         <VDivider />
         <div class="d-flex justify-space-between mt-5 pt-5 ml-3 mr-3 mb-1">
@@ -78,12 +71,12 @@ const total = computed(() => get_total())
         <VDivider />
         <div class="d-flex justify-space-between mt-5 pt-5 ml-3 mr-3 mb-1">
           <span class="text-sm">Email</span>
-          <h5>alimousawi@gmail.com</h5>
+          <h5>{{ userData.email }}</h5>
         </div>
         <VDivider />
         <div class="d-flex justify-space-between mt-5 pt-5 ml-3 mr-3 mb-1">
           <span class="text-sm">Mobile</span>
-          <h5>+971505140401</h5>
+          <h5>{{ userData.phone || '+971505140401'}}</h5>
         </div>
       </VCol>
       <VCol
@@ -108,9 +101,9 @@ const total = computed(() => get_total())
           </div>
           <div class="d-flex justify-center align-center">
             <div class="d-flex justify-space-between border-success-dash pl-2 pr-2 pt-2 pb-2">
-              <h4>XjhZ2f0G</h4>
+              <h4>{{ order.reference_no }}</h4>
               <div class="ml-5">
-                <VIcon size="30" color="success" icon="tabler-copy"></VIcon>
+                <VIcon size="30" color="success" icon="tabler-copy" @click="copyToClipboard(order.reference_no)"></VIcon>
                 <span class="text-success">Copy</span>
               </div>
             </div>
