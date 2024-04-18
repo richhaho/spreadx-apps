@@ -308,7 +308,7 @@ function orderNow() {
               <h4>Grand Total</h4>
               <span class="text-xs">(Inclusive all VAT)</span>
             </div>
-            <h4>AED {{ total + Math.round(total * 0.02 * 100) / 100 }}</h4>
+            <h4>AED {{ Math.round(total * 1.02 * 100) / 100 }}</h4>
           </div>
           <div class="d-flex justify-space-between mt-3 mb-3">
             <span class="text-sm">Tax</span>

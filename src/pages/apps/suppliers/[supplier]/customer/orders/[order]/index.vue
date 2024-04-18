@@ -246,7 +246,7 @@ function reOrder(order) {
                   <h4>Grand Total</h4>
                   <span class="text-xs">(Inclusive all VAT)</span>
                 </div>
-                <h4>AED {{ order.grand_total }}</h4>
+                <h4>AED {{ Math.round(order.grand_total * 100) /100 }}</h4>
               </div>
               <div class="d-flex justify-space-between mt-3 mb-3">
                 <span class="text-sm">Tax</span>
