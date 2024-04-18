@@ -1,10 +1,13 @@
 <script setup>
+import { useDemoVendorStore } from '@/store/demoVendorStore';
 import { useUiStore } from '@/store/uiStore';
 import { useRoute } from 'vue-router';
+const demoVendorStore = useDemoVendorStore();
 const route = useRoute()
 const uiStore = useUiStore()
 const supplier_id = route.params.supplier
 const userData = JSON.parse(localStorage.getItem("userData"));
+const business_id = userData.business.id
 const order = JSON.parse(localStorage.getItem("orderDetail"));
 const cart_products = computed(() => uiStore.$state.cartItems)
 

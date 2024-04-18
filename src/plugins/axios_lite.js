@@ -1,11 +1,11 @@
 import axios from "axios";
 
 const base_api_url =
-  import.meta.env.VITE_BASE_PROXY_KEY;
+  import.meta.env.VITE_BASE_URL || "https://dev.spread.ae/lite/api";
 const access_token = localStorage.getItem("accessToken");
 
 const axios_lite = axios.create({
-  baseURL: "/lite",
+  baseURL: base_api_url || "/lite",
   withCredentials: false,
   headers: {
     'Access-Control-Allow-Origin': "*"
