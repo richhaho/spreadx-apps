@@ -3,8 +3,12 @@ import { useUiStore } from '@/store/uiStore';
 const uiStore = useUiStore()
 const order = JSON.parse(localStorage.getItem("orderDetail"));
 const userData = JSON.parse(localStorage.getItem("userData"));
+const supplier_id = '3GTAbmAx'
 function copyToClipboard(data) {
   navigator.clipboard.writeText(data);
+}
+function toOrderDetail(order) {
+  localStorage.setItem("orderDetail", JSON.stringify(order));
 }
 </script>
 
@@ -46,7 +50,7 @@ function copyToClipboard(data) {
               <h5 class="ml-1">#{{ order.invoice_no }}</h5>
               <h4 class="ml-1">AED {{ Math.round(order.grand_total * 100)/100 }}</h4>
             </div>
-            <VBtn color="success" size="small">Details</VBtn>
+            <VBtn color="success" size="small" @click="toOrderDetail(order)" :to="`/apps/suppliers/${supplier_id}/customer/orders/${order.reference_no}`">Details</VBtn>
           </div>
         </VCard>
         <VCard class="ml-2 mr-2 pl-3 mt-5 pr-3 pt-3 pb-3" color="#f4f3f3">
