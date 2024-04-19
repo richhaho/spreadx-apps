@@ -321,7 +321,7 @@ async function orderNow() {
         </VCard>
         <VCard class="mt-5 ml-2 mr-2">
           <VBtn class="w-100" color="success" @click="orderNow()">
-            Pay
+            Place Order
           </VBtn>
         </VCard>
       </VCol>

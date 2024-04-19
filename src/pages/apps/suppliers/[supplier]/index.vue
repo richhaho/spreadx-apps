@@ -115,109 +115,7 @@ function update_cart(product) {
     <VCol
       cols="12"
       relative
-      sm="4"
-      md="3"
-      lg="3"
-      class="d-none"
-    >
-      <h3 v-if="currentSupplier.name">
-        <RouterLink
-          to="/apps/suppliers"
-          class="supplier-link"
-        >
-          Supplier list >>
-        </RouterLink>
-        {{ currentSupplier.name }}
-      </h3>
-      <h3
-        v-else
-        color="error"
-      >
-        You are not verified for the supplier you selected
-      </h3>
-
-      <VList
-        v-model:opened="open"
-        style="height: 100%;"
-      >
-        <VListItem
-          prepend-icon="tabler-home"
-          title="Supplier Dashboard"
-          :to="`/apps/suppliers/${supplier_id}/dashboard`"
-          value="supplier_id"
-        />
-        <VListGroup value="Orders">
-          <template #activator="{ props }">
-            <VListItem
-              v-bind="props"
-              prepend-icon="tabler-users"
-              title="My Orders"
-            />
-          </template>
-
-          <VListItem
-            value="New Order"
-            title="new Order"
-            :to="`/apps/suppliers/${supplier_id}/products`"
-            prepend-icon="tabler-plus"
-          />
-
-          <VListItem
-            value="Order List"
-            title="Order List"
-            :to="`/apps/suppliers/${supplier_id}/order_list`"
-            prepend-icon="tabler-list"
-          />
-        </VListGroup>
-        <VListGroup value="Tickets">
-          <template #activator="{ props }">
-            <VListItem
-              v-bind="props"
-              prepend-icon="tabler-users"
-              title="My Tickets"
-            />
-          </template>
-
-          <VListItem
-            value="New Ticket"
-            title="New Ticket"
-            :to="`/apps/suppliers/${supplier_id}/ticket/create_ticket`"
-            prepend-icon="tabler-plus"
-          />
-
-
-          <VListItem
-            value="Ticket List"
-            title="Ticket List"
-            :to="`/apps/suppliers/${supplier_id}/ticket/tickets`"
-            prepend-icon="tabler-list"
-          />
-        </VListGroup>
-
-
-
-        <VListGroup value="payments">
-          <template #activator="{ props }">
-            <VListItem
-              v-bind="props"
-              prepend-icon="tabler-users"
-              title="My Payments"
-            />
-          </template>
-
-          <VListItem
-            v-for="([title, icon], i) in payments"
-            :key="i"
-            :value="title"
-            :title="title"
-            :prepend-icon="icon"
-          />
-        </VListGroup>
-      </VList>
-    </VCol>
-    <VCol
-      cols="12"
-      relative
+      v-if="currentSupplier.name"
     >
       <VCard class="header">
         <VRow>
@@ -234,7 +132,7 @@ function update_cart(product) {
             md="9"
           >
             <span>Supplier Name</span>
-            <h2>{{ currentSupplier.name || 'You are not verified for the supplier you selected' }}</h2>
+            <h2>{{ currentSupplier.name}}</h2>
             <p class="mt-2">{{ currentSupplier.description }}</p>
           </VCol>
         </VRow>
@@ -376,6 +274,15 @@ function update_cart(product) {
               </template>
             </div>
         </PerfectScrollbar>
+      </VCard>
+    </VCol>
+    <VCol
+      cols="12"
+      relative
+      v-else
+    >
+      <VCard class="header">
+        <h2 class="mt-3 mb-3 ml-3">You are not verified for the supplier you selected</h2>
       </VCard>
     </VCol>
   </VRow>
