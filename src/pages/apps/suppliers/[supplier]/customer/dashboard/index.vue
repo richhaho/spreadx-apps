@@ -1,58 +1,19 @@
 <script setup>
+import { useDemoVendorStore } from '@/store/demoVendorStore';
 import { useUiStore } from '@/store/uiStore';
 import { useRoute } from 'vue-router';
+const demoVendorStore = useDemoVendorStore();
 const route = useRoute()
 const uiStore = useUiStore()
 const userData = JSON.parse(localStorage.getItem("userData"));
+const business_id = userData.business.id
 const supplier_id = route.params.supplier
-const cart_products = computed(() => uiStore.$state.cartItems)
-function update_cart(product) {
-  const products = JSON.parse(localStorage.getItem('cart') || '[]')
-  const index = products.findIndex((item) => item.id === product.id)
-  if (index < 0) {
-    products.push(product)
-  } else if (!product.cart) {
-    products.splice(index, 1)
-  } else {
-    products.splice(index, 1, product)
-  }
-  localStorage.setItem('cart', JSON.stringify(products))
-  uiStore.$state.cartItems = products
+demoVendorStore.fetchOrders(business_id, supplier_id)
+const orderData = computed(() => demoVendorStore.$state.orders)
+const orders = computed(() => orderData.value.length > 0 ? orderData.value[0].order_list : [])
+function toOrderDetail(order) {
+  localStorage.setItem("orderDetail", JSON.stringify(order));
 }
-
-function removeFromCart(product) {
-  const products = JSON.parse(localStorage.getItem('cart') || '[]')
-  const index = products.findIndex((item) => item.id === product.id)
-  if (index < 0) {
-    return
-  } else {
-    products.splice(index, 1)
-  }
-  localStorage.setItem('cart', JSON.stringify(products))
-  uiStore.$state.cartItems = products
-}
-
-function get_total() {
-  const products = uiStore.$state.cartItems
-  let sum = 0;
-  products.forEach((item) => {
-    sum = sum + item.price * item.cart
-  })
-  return sum
-}
-
-const total = computed(() => get_total())
-
-function calc_unit(product) {
-  const stock = JSON.parse(product.stock) || []
-  let sum;
-  stock.forEach((item) => {
-    sum = item.weight
-  })
-  return sum ? sum + product.unit_name : ''
-}
-
-const screen_width = window.innerWidth
 </script>
 
 <template>
@@ -140,7 +101,7 @@ const screen_width = window.innerWidth
             <VCard class="ml-3 mr-3 pl-3 pr-3 pt-3 pb-5" variant="outlined">
               <VRow class="mb-1">
                 <VCol cols="12" class="mt-5 mb-5">
-                  <h4 class="mt-2 text-center">0/3</h4>
+                  <h4 class="mt-2 text-center"> {{ orders.length }}/3</h4>
                   <h4 class="text-center">Orders</h4>
                 </VCol>
               </VRow>
@@ -186,12 +147,14 @@ const screen_width = window.innerWidth
               </tr>
             </thead>
             <tbody>
-              <tr v-for="a in 3">
-                <td class="text-center">599192</td>
-                <td class="text-center">Mon 08 Apr, 2024</td>
-                <td class="text-center">Confirmed</td>
-                <td class="text-center">AED 39.84</td>
-                <td class="text-center"><VIcon icon="tabler-arrow-right" /></td>
+              <tr v-for="order in orders">
+                <td class="text-center">{{ order.invoice_no }}</td>
+                <td class="text-center">{{ order.order_date }}</td>
+                <td class="text-center">{{ order.status }}</td>
+                <td class="text-center">AED {{ order.grand_total }}</td>
+                <td class="text-center">
+                  <VBtn color="default" icon="tabler-arrow-right" size="x-small" class="ml-1" @click="toOrderDetail(order)" :to="`/apps/suppliers/${supplier_id}/customer/orders/${order.reference_no}`" />
+                </td>
               </tr>
 
             </tbody>

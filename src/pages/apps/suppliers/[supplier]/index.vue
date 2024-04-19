@@ -244,6 +244,56 @@ function update_cart(product) {
           <VCarouselItem :cover="false" v-for="banner in currentSupplier.banners" :src="banner.image"></VCarouselItem>
         </VCarousel>
       </VCard>
+      <VRow class="mt-3">
+        <VCol cols="12" sm="3">
+          <VCard color="success" class="pt-3 pl-3 pr-3 pb-3" :to="`/apps/suppliers/${supplier_id}/customer/orders`">
+            <div class="d-flex justify-space-between">
+              <div>
+                <h5 class="text-white">My</h5>
+                <h5 class="text-white">Orders</h5>
+              </div>
+              <VIcon icon="tabler-refresh" size="40" />
+            </div>
+          </VCard>
+        </VCol>
+        <VCol cols="12" sm="2">
+          <VCard color="error" class="pt-3 pl-3 pr-3 pb-3">
+            <div class="d-flex justify-space-between">
+              <div>
+                <h5 class="text-white">Buy it</h5>
+                <h5 class="text-white">Again</h5>
+              </div>
+              <VIcon icon="tabler-heart" size="40" />
+            </div>
+          </VCard>
+        </VCol>
+        <VCol cols="12" sm="3">
+          <VCard color="warning" class="pt-3 pl-3 pr-3 pb-3">
+            <div class="d-flex justify-space-between">
+              <div>
+                <h5 class="text-white">Refer a</h5>
+                <h5 class="text-white">Friend</h5>
+              </div>
+              <VIcon icon="tabler-users" size="40" />
+            </div>
+          </VCard>
+        </VCol>
+        <VCol cols="12" sm="4">
+          <VCard color="info" class="pt-3 pl-3 pr-3 pb-3">
+            <div class="d-flex justify-space-between">
+              <VIcon icon="tabler-crown" size="40" />
+              <div>
+                <h5 class="text-white">You are a Pro member</h5>
+                <h5 class="text-white">AED 0.3 (3 FreshCoins)</h5>
+              </div>
+              <div>
+                <h5 class="text-white">0/3</h5>
+                <h6 class="text-white">Orders</h6>
+              </div>
+            </div>
+          </VCard>
+        </VCol>
+      </VRow>
       <VCard
         v-for="category in categories"
         :title="JSON.parse(category).name"
@@ -376,4 +426,5 @@ function update_cart(product) {
     height: 120px; line-height: 90% !important;
   }
 }
+
 </style>

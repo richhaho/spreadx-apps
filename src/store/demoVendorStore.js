@@ -45,7 +45,10 @@ export const useDemoVendorStore = defineStore("useDemoVendorStore", {
         }
       */
         
-      axios_lite.post('v1/store_order?business_id=' + business_id, payload)
+      axios_lite.post('v1/store_order?business_id=' + business_id, payload).then((response) => {
+        const order = response.data.order;
+        localStorage.setItem("orderDetail", JSON.stringify(order));
+      });
     },
     fetchOrders(business_id, supplier_id = '3GTAbmAx'){
       axios_lite.get('v1/get_store_order?business_id=' + business_id + '&supplier_id=' + supplier_id).then((response) => {

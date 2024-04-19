@@ -1,10 +1,13 @@
 <script setup>
+import { useDemoVendorStore } from '@/store/demoVendorStore';
 import { useUiStore } from '@/store/uiStore';
 import { useRoute } from 'vue-router';
+const demoVendorStore = useDemoVendorStore();
 const route = useRoute()
 const uiStore = useUiStore()
 const supplier_id = route.params.supplier
 const userData = JSON.parse(localStorage.getItem("userData"));
+const business_id = userData.business.id
 const order = JSON.parse(localStorage.getItem("orderDetail"));
 const cart_products = computed(() => uiStore.$state.cartItems)
 
@@ -243,7 +246,7 @@ function reOrder(order) {
                   <h4>Grand Total</h4>
                   <span class="text-xs">(Inclusive all VAT)</span>
                 </div>
-                <h4>AED {{ order.grand_total }}</h4>
+                <h4>AED {{ Math.round(order.grand_total * 100) /100 }}</h4>
               </div>
               <div class="d-flex justify-space-between mt-3 mb-3">
                 <span class="text-sm">Tax</span>
