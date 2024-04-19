@@ -48,6 +48,7 @@ async function orderNow() {
     "delivery_slot_id": 0,
     "business_id": business_id
     }
+  uiStore.clearCartItem()
   await demoVendorStore.storeOrder(business_id, payload)
   setTimeout(() => { router.push('/apps/suppliers/payment') }, 2500)
 }

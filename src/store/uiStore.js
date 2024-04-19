@@ -19,6 +19,9 @@ export const useUiStore = defineStore("useUiStore", () => {
   const tickets = ref([]);
   const suppliers = ref([]);
 
+  function clearCartItem() {
+    localStorage.setItem('cart', JSON.stringify([]))
+  }
 
   function setSnackBar(status, color, message) {
     snackbar.value = status,
@@ -97,8 +100,8 @@ export const useUiStore = defineStore("useUiStore", () => {
         updateOrderNo,
         getOrderItems,
         getSuppliers,
-        getTickets
-
+        getTickets,
+        clearCartItem
   };
 });
 
