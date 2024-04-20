@@ -58,7 +58,6 @@ function toOrderDetail(order) {
             <div>
               <span class="ml-1 text-xs">Delivery Timeslot</span>
               <h6 class="ml-1">{{ order.delivery_date }}</h6>
-              <h6 class="ml-1">Express Delivery - 90 mins</h6>
             </div>
             <VBtn color="success" size="small">Details</VBtn>
           </div>

@@ -69,18 +69,8 @@ const screen_width = window.innerWidth
         </VCardText>
         <VCard class="ml-2 mr-2">
           <VCardText class="mobile-view">
-            <div class="d-flex justify-end">
-              <VBtn color="warning" size="x-small">
-                To Express
-              </VBtn>
-            </div>
-            <div class="d-flex justify-space-between">
-              <span class="text-warning text-bold mobile-view">Shipment</span>
-              <span class="text-sm text-warning mobile-view">Express Delivery - 90 mins</span>
-            </div>
             <div class="d-flex justify-space-between">
               <div>Total: AED {{ total }}</div>
-              <span class="text-sm mobile-view">Delevery Fee: AED 6</span>
             </div>
           </VCardText>
           <VCard>
