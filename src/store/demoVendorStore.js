@@ -7,6 +7,7 @@ export const useDemoVendorStore = defineStore("useDemoVendorStore", {
   state: () => ({
     products: ref([]),
     orders: ref([]),
+    delivery_slots: ref([]),
     promotions: ref([]),
     account_receipt_note: ref([]),
     isAccountReceiptSaving : ref(false),
@@ -53,6 +54,11 @@ export const useDemoVendorStore = defineStore("useDemoVendorStore", {
     fetchOrders(business_id, supplier_id = '3GTAbmAx'){
       axios_lite.get('v1/get_store_order?business_id=' + business_id + '&supplier_id=' + supplier_id).then((response) => {
         this.orders = response.data.orders;
+      });
+    },
+    fetchDeliverySlot(supplier_id = '3GTAbmAx'){
+      axios_lite.get('v1/delivery_spots?supplier_id=' + supplier_id).then((response) => {
+        this.delivery_slots = response.data.data;
       });
     },
     fetchAllProducts(business_id){

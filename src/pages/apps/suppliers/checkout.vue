@@ -15,6 +15,9 @@ demoVendorStore.fetchOrders(business_id, supplier_id)
 const orderData = computed(() => demoVendorStore.$state.orders)
 const orders = computed(() => orderData.value.length > 0 ? orderData.value[0].order_list : [])
 
+demoVendorStore.fetchDeliverySlot(supplier_id)
+const deliverySlots = computed(() => demoVendorStore.$state.delivery_slots)
+
 function toCardPage() {
   router.push('/apps/suppliers/cart')
 }
