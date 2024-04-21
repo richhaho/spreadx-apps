@@ -10,6 +10,11 @@ const cart_products = computed(() => uiStore.$state.cartItems)
 const userData = JSON.parse(localStorage.getItem("userData"));
 const business_id = userData.business.id
 
+demoVendorStore.fetchOrders(business_id, supplier_id)
+const orderData = computed(() => demoVendorStore.$state.orders)
+const orders = computed(() => orderData.value.length > 0 ? orderData.value[0].order_list : [])
+
+
 function get_total() {
   const products = uiStore.$state.cartItems
   let sum = 0;
@@ -280,7 +285,7 @@ async function orderNow() {
               <h6> Please 3 orders each above 100 to upgrade to VIP membership</h6>
             </div>
             <div class="pt-1 pb-1 text-center">
-              <h5> 0/3</h5>
+              <h5> {{ orders.length }}/3</h5>
               <h6> Orders</h6>
             </div>
         </VCard>
