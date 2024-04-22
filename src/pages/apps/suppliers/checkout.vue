@@ -18,6 +18,18 @@ const orders = computed(() => orderData.value.length > 0 ? orderData.value[0].or
 demoVendorStore.fetchDeliverySlot(supplier_id)
 const deliverySlots = computed(() => demoVendorStore.$state.delivery_slots)
 
+const isEditAddressDialogVisible = ref(false)
+let billingAddress = ref({
+  billingEmail: userData.email,
+  taxID: '',
+  vatNumber: '',
+  address: userData.address,
+  contact: userData.business.business_name,
+  country: userData.business.country,
+  state: userData.business.state || '',
+  zipCode: userData.business.zip || ''
+})
+
 function toCardPage() {
   router.push('/apps/suppliers/cart')
 }
@@ -54,7 +66,7 @@ async function orderNow() {
   const payload = {
     "customer_name": userData.full_name,
     "customer_email": userData.email,
-    "address": userData.address,
+    "address": billingAddress.address,
     "notes": '',
     "product_id": product_ids.join(','),
     "qty": qtys.join(','),
@@ -87,6 +99,7 @@ async function orderNow() {
             <VIcon
               size="22"
               icon="tabler-pencil"
+              @click="isEditAddressDialogVisible = !isEditAddressDialogVisible"
             />Change
           </div>
         </div>
@@ -96,14 +109,14 @@ async function orderNow() {
               <VBtn color="primary" size="x-small" class="mt-2 ml-2">Default</VBtn>
             </VCol>
             <VCol cols="7">
-              <h4 class="text-bold mt-2">{{ userData.full_name }}</h4>
-              <p>{{ userData.address || 'Villa3, Villa3, Al Rashdiya, Dubai'}}</p>
+              <h4 class="text-bold mt-2">{{ billingAddress.contact }}</h4>
+              <p>{{ billingAddress.address || 'Villa3, Villa3, Al Rashdiya, Dubai'}}</p>
             </VCol>
             <VCol cols="3">
               <h5 class="mt-2">Phone</h5>
               <span class="text-sm">{{ userData.phone || '+9715055140401' }}</span>
               <h5>Email</h5>
-              <span class="text-sm">{{ userData.email }}</span>
+              <span class="text-sm">{{ billingAddress.billingEmail }}</span>
             </VCol>
           </VRow>
         </VCard>
@@ -341,6 +354,10 @@ async function orderNow() {
       </VCol>
     </VRow>
   </VCard>
+  <EditAddressDialog
+    v-model:isDialogVisible="isEditAddressDialogVisible"
+    v-model:billingAddress="billingAddress"
+  />
 </template>
 
 <style>
