@@ -25,7 +25,7 @@ const business_id = userData.business.id
 
 demoVendorStore.fetchAllProducts(business_id)
 const products = computed(() => demoVendorStore.$state.products)
-const my_products = computed(() => products.value.filter((item) => JSON.parse(item.category).id == category_id))
+const my_products = computed(() => category_id == 'all' ? products.value : products.value.filter((item) => JSON.parse(item.category).id == category_id))
 const categories = computed(() => products.value.map((item) => item.category).filter((value, index, array) => array.indexOf(value) === index).map((item) => JSON.parse(item)))
 const current_category = computed(() => categories.value.find((item) => item.id == category_id))
 const countries = [
@@ -83,6 +83,10 @@ function update_cart(product) {
   localStorage.setItem('cart', JSON.stringify(products))
   uiStore.$state.cartItems = products
 }
+function toCategory(category_id) {
+  location.href = `/apps/categories/${category_id}`
+}
+
 </script>
 
 <template>
@@ -102,8 +106,8 @@ function update_cart(product) {
           active-color="success"
           variant="text"
           :title="category.name"
-          :to="`/apps/categories/${category.id}`"
           :value="category.id"
+          @click="toCategory(category.id)"
         />
       </VList>
       <VSwitch

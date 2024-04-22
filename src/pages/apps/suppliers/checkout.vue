@@ -10,10 +10,17 @@ const cart_products = computed(() => uiStore.$state.cartItems)
 const userData = JSON.parse(localStorage.getItem("userData"));
 const business_id = userData.business.id
 
+const supplier_id = localStorage.getItem('supplier_id');
 demoVendorStore.fetchOrders(business_id, supplier_id)
 const orderData = computed(() => demoVendorStore.$state.orders)
 const orders = computed(() => orderData.value.length > 0 ? orderData.value[0].order_list : [])
 
+demoVendorStore.fetchDeliverySlot(supplier_id)
+const deliverySlots = computed(() => demoVendorStore.$state.delivery_slots)
+
+function toCardPage() {
+  router.push('/apps/suppliers/cart')
+}
 
 function get_total() {
   const products = uiStore.$state.cartItems
@@ -31,7 +38,7 @@ async function orderNow() {
   const prices = []
   const qtys = []
   const units = []
-  let supplier = 'XhabUF4C'
+  let supplier = supplier_id
   cart_products.value.forEach(product => {
     product_ids.push(product.product_id)
     prices.push(product.price)
@@ -39,6 +46,7 @@ async function orderNow() {
     units.push(product.unit_id)
     supplier = product.get_supplier_details.auth_id || supplier
   })
+  localStorage.setItem('supplier_id', supplier);
   const payload = {
     "customer_name": userData.full_name,
     "customer_email": userData.email,
@@ -247,7 +255,7 @@ async function orderNow() {
       >
         <div class="d-flex justify-space-between mt-3 ml-3 mr-3 mb-1">
           <h4>Your ITEMS({{ cart_products.length || 0 }})</h4>
-          <div>Edit</div>
+          <a @click="toCardPage()">Edit</a>
         </div>
         <VCard class="ml-2 mr-2" color="#eefbf1">
           <VCard>

@@ -1,9 +1,8 @@
 <script setup>
-import { useDemoVendorStore } from '@/store/demoVendorStore';
 import { useUiStore } from '@/store/uiStore';
-import { useRoute } from 'vue-router';
-const demoVendorStore = useDemoVendorStore();
+import { useRoute, useRouter } from 'vue-router';
 const route = useRoute()
+const router = useRouter();
 const uiStore = useUiStore()
 const supplier_id = route.params.supplier
 const userData = JSON.parse(localStorage.getItem("userData"));
@@ -20,33 +19,21 @@ function get_total() {
   return sum
 }
 
-const total = computed(() => get_total())
 function reOrder(order) {
-  const product_ids = []
-  const prices = []
-  const qtys = []
-  const units = []
+  const cart_products = []
   order.order_details.forEach(product => {
-    product_ids.push(product.product_id)
-    prices.push(product.total_amount)
-    qtys.push(product.qty)
-    units.push(product.unit_id)
+    cart_products.push({
+      ...product,
+      cart: product.qty,
+      image: product.image,
+      name: product.product_name,
+      price: product.total_amount
+    })
   })
-  const payload = {
-    "customer_name": userData.full_name,
-    "customer_email": userData.email,
-    "address": userData.address,
-    "notes": '',
-    "product_id": product_ids.join(','),
-    "qty": qtys.join(','),
-    "price": prices.join(','),
-    "batch_no": ",,",
-    "unit": units.join(','),
-    "supplier_id": supplier_id,
-    "delivery_slot_id": 0,
-    "business_id": business_id
-    }
-  demoVendorStore.storeOrder(business_id, payload)
+  localStorage.setItem('cart', JSON.stringify(cart_products));
+  console.log(cart_products)
+  localStorage.setItem('supplier_id', supplier_id);
+  setTimeout(() => { router.push('/apps/suppliers/checkout') }, 1000)
 }
 </script>
 

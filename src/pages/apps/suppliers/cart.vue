@@ -41,12 +41,12 @@ function get_total() {
 const total = computed(() => get_total())
 
 function calc_unit(product) {
-  const stock = JSON.parse(product.stock) || []
+  const stock = JSON.parse(product.stock || "[]") || []
   let sum;
   stock.forEach((item) => {
     sum = item.weight
   })
-  return sum ? sum + product.unit_name : ''
+  return (sum ? sum : '') + product.unit_name
 }
 
 const screen_width = window.innerWidth
