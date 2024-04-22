@@ -32,19 +32,23 @@ function get_total() {
 }
 
 const total = computed(() => get_total())
-
+let deliverySlot = 0
+function selectDeliverySlow(slot) {
+  deliverySlot = slot
+}
 async function orderNow() {
   const product_ids = []
   const prices = []
   const qtys = []
   const units = []
   let supplier = supplier_id
+  console.log(cart_products)
   cart_products.value.forEach(product => {
     product_ids.push(product.product_id)
     prices.push(product.price)
     qtys.push(product.cart)
     units.push(product.unit_id)
-    supplier = product.get_supplier_details.auth_id || supplier
+    supplier = product.get_supplier_details?.auth_id || supplier
   })
   localStorage.setItem('supplier_id', supplier);
   const payload = {
@@ -58,7 +62,7 @@ async function orderNow() {
     "batch_no": ",,",
     "unit": units.join(','),
     "supplier_id": supplier,
-    "delivery_slot_id": 0,
+    "delivery_slot_id": deliverySlot,
     "business_id": business_id
     }
   uiStore.clearCartItem()
@@ -110,29 +114,26 @@ async function orderNow() {
         <VCard class="ml-2 mr-2" variant="outlined">
           <VRow>
             <VCol cols="12" class="d-flex mobile-slot">
-              <VCard class="ml-3 mt-3 pt-1 pb-1 pl-4 pr-4" color="success">
-                <div class="text-center text-sm">09, Apr 24</div>
-                <div class="text-center text-xs mt-1">Tomorrow</div>
-              </VCard>
-              <VCard class="ml-3 mt-3 pt-1 pb-1 pl-4 pr-4">
-                <div class="text-center text-sm">10, Apr 24</div>
-                <div class="text-center text-xs mt-1">Wendsday</div>
-              </VCard>
-              <VCard class="ml-3 mt-3 pt-1 pb-1 pl-4 pr-4">
-                <div class="text-center text-sm">11, Apr 24</div>
-                <div class="text-center text-xs mt-1">Thursday</div>
-              </VCard>
-              <VCard class="ml-3 mt-3 pt-1 pb-1 pl-4 pr-4">
-                <div class="text-center text-sm">12, Apr 24</div>
-                <div class="text-center text-xs mt-1">Friday</div>
-              </VCard>
-              <VCard class="ml-3 mt-3 pt-1 pb-1 pl-4 pr-4">
-                <div class="text-center text-sm">13, Apr 24</div>
-                <div class="text-center text-xs mt-1">Saturday</div>
-              </VCard>
+              <VSlideGroup>
+                <v-slide-group-item
+                  v-for="slot in deliverySlots"
+                  :key="n"
+                  v-slot="{ isSelected, toggle }"
+                  @group:selected="selectDeliverySlow(slot.id)"
+                >
+                  <VCard
+                    :color="isSelected ? 'success' : 'default'"
+                    class="ma-2 pl-2 pr-2 pt-2 pb-2"
+                    @click="toggle"
+                  >
+                    <h5 class="text-center">{{ slot.day.toUpperCase() }}</h5>
+                    <h6>{{ slot.start_time }} - {{ slot.end_time }}</h6>
+                  </VCard>
+                </v-slide-group-item>
+              </VSlideGroup>
             </VCol>
           </VRow>
-          <VRow style="background-color: #def8e3;">
+          <VRow class="d-none" style="background-color: #def8e3;">
             <VCol cols="12" class="d-flex mobile-slot">
               <VCard class="ml-3 mb-2 pt-1 pb-1 pl-4 pr-4" color="warning">
                 <div class="text-center text-xs">Breakfast Slot</div>

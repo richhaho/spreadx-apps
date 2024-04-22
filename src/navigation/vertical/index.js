@@ -11,14 +11,4 @@ export default [{
     icon: "tabler-dashboard",
   },
 },
-{
-  title: "Categories",
-  to: {
-    name: "apps-categories-category",
-    params: { category: 'all' },
-  },
-  icon: {
-    icon: "tabler-list",
-  },
-},
 ]
