@@ -60,6 +60,9 @@ const currentSupplier = computed(() => {
 
 const categories = computed(() => products.value.map((item) => item.category).filter((value, index, array) => array.indexOf(value) === index))
 
+// demoVendorStore.getCustomer(supplier_id)
+
+
 const open = ref(['Users', 'Admin'])
 
 const orders = [

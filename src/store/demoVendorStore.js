@@ -61,6 +61,11 @@ export const useDemoVendorStore = defineStore("useDemoVendorStore", {
         this.delivery_slots = response.data.data;
       });
     },
+    getCustomer(supplier_id = '3GTAbmAx'){
+      axios_lite.get('v1/view_customer?supplier_id=' + supplier_id).then((response) => {
+        console.log(response.data)
+      });
+    },
     fetchAllProducts(business_id){
       axios_lite.get('v1/get_vendors_products?business_id=' + business_id + '&supplier_id=OP8vVIvL').then((response) => {
         this.products = response.data.products;
