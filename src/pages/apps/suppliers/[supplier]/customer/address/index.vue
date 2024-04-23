@@ -10,7 +10,18 @@ const business_id = userData.business.id
 const supplier_id = route.params.supplier
 demoVendorStore.fetchOrders(business_id, supplier_id)
 
-const isViewAddMapDialogue = ref(false);
+const isEditAddressDialogVisible = ref(false)
+let billingAddress = ref({
+  first_name: userData.first_name,
+  last_name: userData.last_name,
+  email: userData.email,
+  city: userData.city,
+  state: userData.state,
+  phone: userData.phone,
+  address1: userData.address,
+  address2: userData.address || '',
+  country: userData.country || ''
+})
 
 </script>
 
@@ -77,33 +88,35 @@ const isViewAddMapDialogue = ref(false);
             /> Add address
           </a>
         </div>
-        <VCard class="ml-2 mr-2" image="https://openmaptiles.org/img/home-banner-map.png" variant="outlined">
+        <VCard
+          class="ml-2 mr-2"
+          image="https://openmaptiles.org/img/home-banner-map.png"
+          variant="outlined"
+        >
           <VRow>
             <VCol cols="12" sm="2">
               <VBtn color="primary" size="x-small" class="mt-2 ml-2">Default</VBtn>
             </VCol>
             <VCol cols="12" sm="6">
-              <h4 class="text-bold mt-2">{{ userData.full_name }}</h4>
-              <p>{{ userData.address || 'Villa3, Villa3, Al Rashdiya, Dubai'}}</p>
+              <h4 class="text-bold mt-2">{{ billingAddress.first_name }} {{ billingAddress.last_name }}</h4>
+              <p>{{ billingAddress.address1 }} {{ billingAddress.address2 }}</p>
             </VCol>
             <VCol cols="10" sm="3">
               <h5 class="mt-2">Phone</h5>
-              <span class="text-sm">{{ userData.phone || '+9715055140401' }}</span>
+              <span class="text-sm">{{ billingAddress.phone || '+9715055140401' }}</span>
               <h5>Email</h5>
-              <span class="text-sm">{{ userData.email }}</span>
+              <span class="text-sm">{{ billingAddress.email }}</span>
             </VCol>
             <VCol cols="2" sm="1">
-              <VIcon icon="tabler-pencil" size="22" />
+              <VIcon icon="tabler-pencil" size="22" @click="isEditAddressDialogVisible = !isEditAddressDialogVisible" />
               <VIcon icon="tabler-trash" size="22" />
             </VCol>
           </VRow>
         </VCard>
-        <VDialog v-model="isViewAddMapDialogue" max-width="600">
-          <VCard>
-            <div id="map"></div>
-
-          </VCard>
-        </VDialog>
+        <EditAddressDialog
+          v-model:isDialogVisible="isEditAddressDialogVisible"
+          v-model:billingAddress="billingAddress"
+        />
       </VCol>
     </VRow>
   </VCard>
