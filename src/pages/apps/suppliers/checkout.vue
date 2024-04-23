@@ -14,6 +14,9 @@ const supplier_id = localStorage.getItem('supplier_id');
 demoVendorStore.fetchOrders(business_id, supplier_id)
 const orderData = computed(() => demoVendorStore.$state.orders)
 const orders = computed(() => orderData.value.length > 0 ? orderData.value[0].order_list : [])
+const payment_methods = computed(() => demoVendorStore.$state.payment_methods)
+const payment_method = ref('')
+demoVendorStore.getPaymentMethods()
 
 demoVendorStore.fetchDeliverySlot(supplier_id)
 const deliverySlots = computed(() => demoVendorStore.$state.delivery_slots)
@@ -220,44 +223,48 @@ async function orderNow() {
         <div class="d-flex justify-space-between mt-5 ml-3 mr-3 mb-1">
           <h4>PAYMENT</h4>
         </div>
-        <VCard class="ml-2 mr-2" variant="outlined">
-          <VRow>
-            <VCol cols="12" class="d-flex justify-space-between pl-5 pr-5 pt-5">
-              <VRadio label="Pay with Credit/Debit Card" />
-              <VIcon
-                size="22"
-                icon="tabler-credit-card"
-                class="ml-2"
-              />
-            </VCol>
-            <VCol cols="12" class="pl-5 pr-5">
-              <VTextField
-                icon="tabler-credit-card"
-                placeholder="Card Number"
-                density="compact"
-                @change="search()"
-              >
-                <template #prepend-inner>
-                  <VIcon
+        <VCard class="ml-2 mr-2 pb-2" variant="outlined">
+          <v-radio-group>
+            <VRow v-for="payment in payment_methods">
+              <VCol cols="12" class="d-flex justify-space-between pl-5 pr-5 pt-5">
+                <VRadio :value="payment.id" :label="'Pay with ' + payment.payment_method" />
+                <VIcon
+                  size="22"
+                  icon="tabler-credit-card"
+                  class="ml-2"
+                />
+              </VCol>
+              <template v-if="payment.payment_method == 'CARD'">
+                <VCol cols="12" class="pl-5 pr-5">
+                  <VTextField
                     icon="tabler-credit-card"
-                    size="23"
-                  />
-                </template>
-                <template #append-inner>
-                  <span class="text-xs">MM/YY CVV</span>
-                </template>
-              </VTextField>
-              <div class="d-flex mt-2">
-                <VCheckbox class="ml-3" label="Remember this card" color="success" />
-              </div>
-              <div class="d-flex ml-3">
-                <h6>Baraket will security store this card for faster payment experience. Your CVV number will not be stored.</h6>
-              </div>
-            </VCol>
-            <VCol cols="12" class="pl-5 pr-5 pb-3 d-flex justify-end text-success" style="background-color: #def8e3;">
-              <span class="text-sm mb-3">Saved Cards</span>
-            </VCol>
-          </VRow>
+                    placeholder="Card Number"
+                    density="compact"
+                    @change="search()"
+                  >
+                    <template #prepend-inner>
+                      <VIcon
+                        icon="tabler-credit-card"
+                        size="23"
+                      />
+                    </template>
+                    <template #append-inner>
+                      <span class="text-xs">MM/YY CVV</span>
+                    </template>
+                  </VTextField>
+                  <div class="d-flex mt-2">
+                    <VCheckbox class="ml-3" label="Remember this card" color="success" />
+                  </div>
+                  <div class="d-flex ml-3">
+                    <h6>Baraket will security store this card for faster payment experience. Your CVV number will not be stored.</h6>
+                  </div>
+                </VCol>
+                <VCol cols="12" class="pl-5 pr-5 pb-3 d-flex justify-end text-success" style="background-color: #def8e3;">
+                  <span class="text-sm mb-3">Saved Cards</span>
+                </VCol>
+              </template>
+            </VRow>
+          </v-radio-group>
         </VCard>
       </VCol>
       <VCol
