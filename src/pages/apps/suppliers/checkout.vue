@@ -23,14 +23,15 @@ const deliverySlots = computed(() => demoVendorStore.$state.delivery_slots)
 
 const isEditAddressDialogVisible = ref(false)
 let billingAddress = ref({
-  billingEmail: userData.email,
-  taxID: '',
-  vatNumber: '',
-  address: userData.address,
-  contact: userData.business.business_name,
-  country: userData.business.country,
-  state: userData.business.state || '',
-  zipCode: userData.business.zip || ''
+  first_name: userData.first_name,
+  last_name: userData.last_name,
+  email: userData.email,
+  city: userData.city,
+  state: userData.state,
+  phone: userData.phone,
+  address1: userData.address,
+  address2: userData.address || '',
+  country: userData.country || ''
 })
 
 function toCardPage() {
@@ -69,7 +70,7 @@ async function orderNow() {
   const payload = {
     "customer_name": userData.full_name,
     "customer_email": userData.email,
-    "address": billingAddress.address,
+    "address": billingAddress.address1 + ' ' + billingAddress.address1,
     "notes": '',
     "product_id": product_ids.join(','),
     "qty": qtys.join(','),
@@ -112,14 +113,14 @@ async function orderNow() {
               <VBtn color="primary" size="x-small" class="mt-2 ml-2">Default</VBtn>
             </VCol>
             <VCol cols="7">
-              <h4 class="text-bold mt-2">{{ billingAddress.contact }}</h4>
-              <p>{{ billingAddress.address || 'Villa3, Villa3, Al Rashdiya, Dubai'}}</p>
+              <h4 class="text-bold mt-2">{{ billingAddress.first_name }} {{ billingAddress.last_name }}</h4>
+              <p>{{ billingAddress.address1 }} {{ billingAddress.address2 }}</p>
             </VCol>
             <VCol cols="3">
               <h5 class="mt-2">Phone</h5>
-              <span class="text-sm">{{ userData.phone || '+9715055140401' }}</span>
+              <span class="text-sm">{{ billingAddress.phone || '+9715055140401' }}</span>
               <h5>Email</h5>
-              <span class="text-sm">{{ billingAddress.billingEmail }}</span>
+              <span class="text-sm">{{ userData.email }}</span>
             </VCol>
           </VRow>
         </VCard>
