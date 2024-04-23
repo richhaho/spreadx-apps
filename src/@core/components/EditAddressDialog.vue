@@ -23,9 +23,10 @@ const resetForm = () => {
   billingAddress.value = structuredClone(toRaw(props.billingAddress))
 }
 
-const onFormSubmit = () => {
+const onFormSubmit = (data) => {
   emit('update:isDialogVisible', false)
   emit('submit', billingAddress.value)
+  emit('update:billingAddress',  billingAddress.value)
 }
 
 const dialogModelValueUpdate = val => {
