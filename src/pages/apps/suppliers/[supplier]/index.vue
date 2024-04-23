@@ -153,7 +153,7 @@ function update_cart(product) {
           <VCarouselItem :cover="false" v-for="banner in currentSupplier.banners" :src="banner.image"></VCarouselItem>
         </VCarousel>
       </VCard>
-      <VRow class="mt-3" v-if="userData.verify_at">
+      <VRow class="mt-3" v-if="userData.verify_at && customer.id">
         <VCol cols="12" sm="3">
           <VCard color="success" class="pt-3 pl-3 pr-3 pb-3" :to="`/apps/suppliers/${supplier_id}/customer/orders`">
             <div class="d-flex justify-space-between">
