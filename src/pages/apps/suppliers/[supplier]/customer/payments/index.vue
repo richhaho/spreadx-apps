@@ -121,7 +121,7 @@ function toOrderDetail(order) {
             <VDivider />
             <div class="d-flex justify-space-between mt-5 pt-5 ml-3 mr-3 mb-1">
               <span class="text-sm">Payment</span>
-              <h5>Pay with Credit/Debit Card</h5>
+              <h5>Pay with {{ order.invoice_type }}</h5>
             </div>
             <VDivider />
             <div class="d-flex justify-space-between mt-5 pt-5 ml-3 mr-3 mb-1">
