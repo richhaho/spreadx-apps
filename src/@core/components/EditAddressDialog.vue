@@ -47,98 +47,43 @@ const dialogModelValueUpdate = val => {
       v-if="props.billingAddress"
       class="pa-sm-9 pa-5"
     >
-      <!-- 👉 Title -->
       <VCardItem>
         <VCardTitle class="text-h5 text-center mb-3">
-          Edit Address
+          Delivery Address
         </VCardTitle>
-        <!-- 👉 Subtitle -->
-        <p class="text-center">
-          Edit Address for future billing
-        </p>
       </VCardItem>
 
       <VCardText>
-        <!-- 👉 Form -->
         <VForm @submit.prevent="onFormSubmit">
           <VRow>
-            <!-- 👉 Company Name -->
             <VCol
               cols="12"
               md="6"
             >
               <VTextField
-                v-model="billingAddress.companyName"
-                label="Company Name"
+                v-model="billingAddress.first_name"
+                label="First Name"
               />
             </VCol>
-
-            <!-- 👉 Email -->
             <VCol
               cols="12"
               md="6"
             >
               <VTextField
-                v-model="billingAddress.billingEmail"
-                label="Email"
+                v-model="billingAddress.last_name"
+                label="Last Name"
               />
             </VCol>
 
-            <!-- 👉 Tax ID -->
             <VCol
               cols="12"
               md="6"
             >
               <VTextField
-                v-model="billingAddress.taxID"
-                label="Tax ID"
+                v-model="billingAddress.city"
+                label="City"
               />
             </VCol>
-
-            <!-- 👉 VAT Number -->
-            <VCol
-              cols="12"
-              md="6"
-            >
-              <VTextField
-                v-model="billingAddress.vatNumber"
-                label="VAT Number"
-              />
-            </VCol>
-
-            <!-- 👉 Billing Address -->
-            <VCol cols="12">
-              <VTextarea
-                v-model="billingAddress.address"
-                rows="2"
-                label="Billing Address"
-              />
-            </VCol>
-
-            <!-- 👉 Contact -->
-            <VCol
-              cols="12"
-              md="6"
-            >
-              <VTextField
-                v-model="billingAddress.contact"
-                label="Contact"
-              />
-            </VCol>
-
-            <!-- 👉 Country -->
-            <VCol
-              cols="12"
-              md="6"
-            >
-              <VSelect
-                v-model="billingAddress.country"
-                label="Country"
-                :items="['USA', 'Uk', 'France', 'Germany', 'Japan']"
-              />
-            </VCol>
-
-            <!-- 👉 State -->
             <VCol
               cols="12"
               md="6"
@@ -149,18 +94,57 @@ const dialogModelValueUpdate = val => {
               />
             </VCol>
 
-            <!-- 👉 Zip Code -->
+            <!-- 👉 VAT Number -->
+            <VCol
+              cols="12"
+              md="12"
+            >
+              <VTextField
+                v-model="billingAddress.phone"
+                label="Phone Number"
+              />
+            </VCol>
+
             <VCol
               cols="12"
               md="6"
             >
               <VTextField
-                v-model="billingAddress.zipCode"
-                label="Zip Code"
+                v-model="billingAddress.address1"
+                label="Address 1"
+              />
+            </VCol>
+            <VCol
+              cols="12"
+              md="6"
+            >
+              <VTextField
+                v-model="billingAddress.address2"
+                label="Address 2"
+              />
+            </VCol>
+.
+            <VCol
+              cols="12"
+              md="12"
+            >
+              <VSelect
+                v-model="billingAddress.country"
+                label="Country"
+                :items="['UAE', 'USA', 'Uk', 'France', 'Germany', 'Japan']"
               />
             </VCol>
 
-            <!-- 👉 Submit and Cancel button -->
+            <VCol
+              cols="12"
+              md="12"
+            >
+              <VTextField
+                v-model="billingAddress.email"
+                label="Email"
+              />
+            </VCol>
+
             <VCol
               cols="12"
               class="text-center"

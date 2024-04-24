@@ -60,8 +60,8 @@ const currentSupplier = computed(() => {
 
 const categories = computed(() => products.value.map((item) => item.category).filter((value, index, array) => array.indexOf(value) === index))
 
-// demoVendorStore.getCustomer(supplier_id)
-
+demoVendorStore.getCustomer(supplier_id)
+const customer = computed(() => demoVendorStore.$state.customer || {})
 
 const open = ref(['Users', 'Admin'])
 
@@ -134,7 +134,15 @@ function update_cart(product) {
             cols="10"
             md="9"
           >
-            <span>Supplier Name</span>
+            <div class="d-flex justify-space-between">
+              <span>Supplier Name</span>
+              <VBtn
+                v-if="customer.id"
+                color="info"
+                size="x-small"
+                :to="`/apps/suppliers/${supplier_id}/customer/dashboard`"
+              >View Customer Area</VBtn>
+            </div>
             <h2>{{ currentSupplier.name}}</h2>
             <p class="mt-2">{{ currentSupplier.description }}</p>
           </VCol>
@@ -145,7 +153,7 @@ function update_cart(product) {
           <VCarouselItem :cover="false" v-for="banner in currentSupplier.banners" :src="banner.image"></VCarouselItem>
         </VCarousel>
       </VCard>
-      <VRow class="mt-3" v-if="userData.verify_at">
+      <VRow class="mt-3" v-if="userData.verify_at && customer.id">
         <VCol cols="12" sm="3">
           <VCard color="success" class="pt-3 pl-3 pr-3 pb-3" :to="`/apps/suppliers/${supplier_id}/customer/orders`">
             <div class="d-flex justify-space-between">

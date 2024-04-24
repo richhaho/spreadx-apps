@@ -15,6 +15,8 @@ export const useDemoVendorStore = defineStore("useDemoVendorStore", {
     category: ref(''),
     brand: ref(''),
     price: ref(0),
+    payment_methods: ref([]),
+    customer: ref({})
   }),
 
   getters: {
@@ -27,7 +29,11 @@ export const useDemoVendorStore = defineStore("useDemoVendorStore", {
         router.push("/");
       }, 500);
     },
-    
+    getPaymentMethods(){
+      axios_lite.get('v2/payment-methods').then((response) => {
+        this.payment_methods = response.data.data;
+      });
+    },
     storeOrder(business_id, payload){
       /* payload format
       {
@@ -63,7 +69,7 @@ export const useDemoVendorStore = defineStore("useDemoVendorStore", {
     },
     getCustomer(supplier_id = '3GTAbmAx'){
       axios_lite.get('v1/view_customer?supplier_id=' + supplier_id).then((response) => {
-        console.log(response.data)
+        this.customer =  response.data.message[0]
       });
     },
     fetchAllProducts(business_id){
