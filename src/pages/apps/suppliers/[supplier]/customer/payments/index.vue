@@ -1,9 +1,9 @@
 <script setup>
-import { useUiStore } from '@/store/uiStore';
-const uiStore = useUiStore()
+import { useRoute } from 'vue-router';
+const route = useRoute()
 const order = JSON.parse(localStorage.getItem("orderDetail"));
 const userData = JSON.parse(localStorage.getItem("userData"));
-const supplier_id = '3GTAbmAx'
+const supplier_id = route.params.supplier
 function copyToClipboard(data) {
   navigator.clipboard.writeText(data);
 }
@@ -85,7 +85,7 @@ function toOrderDetail(order) {
               <span class="text-center">We have received your order. We will send an update with tracking details when we ship your items.</span>
             </div>
             <div class="d-flex justify-center mt-5 ml-3 mr-3 mb-1">
-              <VBtn color="success" class="w-100" :to="'/'">Back Home</VBtn>
+              <VBtn color="success" class="w-100" :to="`/apps/suppliers/${supplier_id}`">Back Home</VBtn>
             </div>
           </VCol>
           <VCol
