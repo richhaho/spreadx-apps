@@ -113,7 +113,7 @@ function reOrder(order) {
             <VCardText>
             <VProgressLinear
               color="success"
-              model-value="40"
+              :model-value="order.status.toUpperCase() == 'COMPLETED' ? 100 : 50"
               height="6"
             />
           </VCardText>
