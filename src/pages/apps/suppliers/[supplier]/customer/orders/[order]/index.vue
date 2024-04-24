@@ -83,7 +83,7 @@ function reOrder(order) {
           :to="`/apps/suppliers/${supplier_id}/customer/payments`"
         />        
       </VList>
-    </VCol>
+      </VCol>
       <VCol
         cols="12"
         relative
