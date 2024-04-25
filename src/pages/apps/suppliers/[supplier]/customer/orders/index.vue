@@ -162,7 +162,7 @@ function toOrderDetail(order) {
           </div>
           <div class="d-flex justify-end mt-1 ml-2 mr-3 mb-3">
             <VBtn color="success" variant="outlined" size="small" @click="reOrder(order)">Reorder</VBtn>
-            <VBtn color="info" size="small" class="ml-1" @click="downloadInvoice(order)">Invoice</VBtn>
+            <VBtn v-if="order.status=='COMPLETED'" color="info" size="small" class="ml-1" :to="`/apps/suppliers/${supplier_id}/customer/orders/${order.reference_no}/invoice`">Invoice</VBtn>
             <VBtn color="success" size="small" class="ml-1" @click="toOrderDetail(order)" :to="`/apps/suppliers/${supplier_id}/customer/orders/${order.reference_no}`">Details</VBtn>
           </div>
         </VCard>
