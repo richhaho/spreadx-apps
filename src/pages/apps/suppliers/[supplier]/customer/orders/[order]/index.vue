@@ -8,16 +8,6 @@ const supplier_id = route.params.supplier
 const userData = JSON.parse(localStorage.getItem("userData"));
 const business_id = userData.business.id
 const order = JSON.parse(localStorage.getItem("orderDetail"));
-const cart_products = computed(() => uiStore.$state.cartItems)
-
-function get_total() {
-  const products = uiStore.$state.cartItems
-  let sum = 0;
-  products.forEach((item) => {
-    sum = sum + item.price * item.cart
-  })
-  return sum
-}
 
 function reOrder(order) {
   const cart_products = []
@@ -83,7 +73,7 @@ function reOrder(order) {
           :to="`/apps/suppliers/${supplier_id}/customer/payments`"
         />        
       </VList>
-    </VCol>
+      </VCol>
       <VCol
         cols="12"
         relative
@@ -113,7 +103,7 @@ function reOrder(order) {
             <VCardText>
             <VProgressLinear
               color="success"
-              model-value="40"
+              :model-value="order.status.toUpperCase() == 'COMPLETED' ? 100 : 50"
               height="6"
             />
           </VCardText>
@@ -244,7 +234,7 @@ function reOrder(order) {
               <VIcon size="42" icon="tabler-credit-card" />
               <div class="ml-3">
                 <h6>Payment method</h6>
-                <h5>Pay with Credit Card</h5>
+                <h5>Pay with {{ order.invoice_type }}</h5>
               </div>
             </VCard>
           </VCol>
