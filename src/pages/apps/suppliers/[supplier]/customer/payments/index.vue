@@ -1,15 +1,48 @@
 <script setup>
+import { useDemoVendorStore } from '@/store/demoVendorStore';
 import { useRoute } from 'vue-router';
+const demoVendorStore = useDemoVendorStore();
 const route = useRoute()
-const order = JSON.parse(localStorage.getItem("orderDetail"));
 const userData = JSON.parse(localStorage.getItem("userData"));
+const business_id = userData.business.id
 const supplier_id = route.params.supplier
-function copyToClipboard(data) {
-  navigator.clipboard.writeText(data);
-}
-function toOrderDetail(order) {
-  localStorage.setItem("orderDetail", JSON.stringify(order));
-}
+demoVendorStore.fetchOrders(business_id, supplier_id)
+const orderData = computed(() => demoVendorStore.$state.orders)
+const orders = computed(() => orderData.value.length > 0 ? orderData.value[0].order_list : [])
+
+const search = '';
+const headers = [
+  {
+    title: '#',
+    align: 'start',
+    key: 'num',
+  },
+  {key:'invoice_date', title:'INVOICE DATE'},
+  {key:'invoice_number', title:'INVOICE NUMBER'},
+  {key:'invoice_total', title:'INVOICE TOTAL'},
+  {key:'balance',  title:'BALANCE'},
+  {key:'amount', title:'AMOUNT TO PAY'}
+];
+
+const invoices = computed(() => {
+  const invoices = [];
+  orders.value.forEach(item => {
+    if (item.invoice_details.id) {
+        const invoice = item.invoice_details
+        invoices.push({
+          num: invoice.id,
+          invoice_date: invoice.created_at,
+          invoice_number: invoice.invoice_no,
+          invoice_total: invoice.net_total + invoice.grand_total + invoice.vat_total,
+          balance: '-',
+          amount: invoice.pending_amount,
+        })
+      
+    }
+  })
+  return invoices
+})
+
 </script>
 
 <template>
@@ -70,16 +103,14 @@ function toOrderDetail(order) {
         <template v-slot:text >
           <VRow style="display: flex; justify-content: space-between; ">
             <VCol cols="4" class="d-flex">
-              <span class="mt-2">Show</span>
+              <span class="mt-2 mr-1">Show</span>
               <v-select 
               :items="['5', '25', '50', '75', '100', 'ALL']"
               ></v-select>
-              
-              <span class="pt-2">entries</span>   
-              
+              <span class="pt-2 ml-1">entries</span>   
             </VCol>   
             <VCol cols="5">
-              <span class="float-left mt-2">Search: </span>
+              <span class="float-left mt-2 mr-1">Search: </span>
               <v-text-field
                 class="w-75"
                 v-model="search"
@@ -92,50 +123,13 @@ function toOrderDetail(order) {
             </VCol>
           </VRow>
         </template>
-        <v-data-table class="table" :headers="headers" :search="search" :item-value="item => `${item.num}-${item.version}`"  :items="desserts" items-per-page="5" show-select>
+        <v-data-table class="table" :headers="headers" :search="search" :item-value="item => `${item.num}-${item.version}`"  :items="invoices" items-per-page="5" show-select>
         </v-data-table>
       </VCard>
       </VCol>
     </VRow>
   </VCard>
 </template>
-<script>
-  export default {
-    data () {
-      return {
-        search: '',
-        headers: [
-          {
-            title: '#',
-            align: 'start',
-            key: 'num',
-          },
-          {key:'invoice_date', title:'INVOICE DATE'},
-          {key:'invoice_number', title:'INVOICE NUMBER'},
-          {key:'invoice_total', title:'INVOICE TOTAL'},
-          {key:'balance',  title:'BALANCE'},
-          {key:'amount', title:'AMOUNT TO PAY'}
-        ],
-        desserts:[
-          {
-            num:'1',
-            invoice_date:'16-04-2024',
-            invoice_number:'IN25442',
-            invoice_total:'145.94',
-            balance : '145.95',
-          },
-          {
-            num:'2',
-            invoice_date:'16-04-2024',
-            invoice_number:'IN25443',
-            invoice_total:'9.45',
-            balance : '9.45',
-          }
-        ]
-      }
-    },
-  }
-</script>
 <style>
 .supplier-link {
   display: inline-block;
