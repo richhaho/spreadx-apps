@@ -12,232 +12,215 @@ const userData = JSON.parse(localStorage.getItem("userData"));
 const business_id = userData.business.id
 const supplier_id = route.params.supplier
 
-//demoVendorStore.fetchOrders(business_id, supplier_id)
+demoVendorStore.fetchOrders(business_id, supplier_id)
 const orderData = computed(() => demoVendorStore.$state.orders)
 const orders = computed(() => orderData.value.length > 0 ? orderData.value[0].order_list : [])
-
-function reOrder(order) {
-  const cart_products = []
-  order.order_details.forEach(product => {
-    cart_products.push({
-      ...product,
-      cart: product.qty,
-      image: product.image,
-      name: product.product_name,
-      price: product.total_amount
-    })
-  })
-  localStorage.setItem('cart', JSON.stringify(cart_products));
-  console.log(cart_products)
-  localStorage.setItem('supplier_id', supplier_id);
-  setTimeout(() => { router.push('/apps/suppliers/checkout') }, 1000)
-}
-
-function downloadInvoice(order) {
-  console.log(order.invoice)
-}
-function toOrderDetail(order) {
-  localStorage.setItem("orderDetail", JSON.stringify(order));
+const order = JSON.parse(localStorage.getItem("orderDetail"));
+console.log(order)
+function print() {
+  window.print()
 }
 
 </script>
 
 <template>
   <div class="d-flex pb-1">
-    <VBtn color = 'primary'>Print Invoice</VBtn>
+    <VBtn color="primary" @click="print()">Print Invoice</VBtn>
   </div>
-  <div class="part-first">
-    <VRow>
-      <VCol cols="2"></VCol>
-      <VCol cols="6" class="general-trading pt-5">
-        <p class="pb-1">DSG GENERAL TRADING LLC</p>
-        <p class="pb-1">دي أس جي التجارة العامة ذ م م</p>
-        <p class="pb-1">Tel : T 971-4-4457721 |F 971-4-8868394</p>
-        <p class="pb-1">Email : sales@dsggeneraltrading.com</p>
-        <p class="pb-1">Address : Ras Al Khor-Dubai -United Arab Emirates</p>
-        <p class="pb-1">TRN : 100510630500003</p>
-      </VCol>
-      <VCol cols="4" class="text-end">
-        <h1>TAX INVOICE</h1>
-        <span class="status">STATUS: COMPLETED</span>
-        <svg width="244px" height="92px" x="0px" y="0px" viewBox="0 0 244 92" style="transform: translate(5px,12px)">
-          <rect x="0" y="0" width="244" height="92" style="fill:#f8f7fa;"></rect>
-          <g transform="translate(10, 10)" style="fill:#000000;">
-            <rect x="0" y="0" width="4" height="50"></rect>
-            <rect x="6" y="0" width="2" height="50"></rect>
-            <rect x="12" y="0" width="2" height="50"></rect>
-            <rect x="22" y="0" width="4" height="50"></rect>
-            <rect x="32" y="0" width="2" height="50"></rect>
-            <rect x="40" y="0" width="2" height="50"></rect>
-            <rect x="44" y="0" width="2" height="50"></rect>
-            <rect x="48" y="0" width="6" height="50"></rect>
-            <rect x="60" y="0" width="4" height="50"></rect>
-            <rect x="66" y="0" width="4" height="50"></rect>
-            <rect x="74" y="0" width="6" height="50"></rect>
-            <rect x="84" y="0" width="2" height="50"></rect>
-            <rect x="88" y="0" width="2" height="50"></rect>
-            <rect x="92" y="0" width="6" height="50"></rect>
-            <rect x="100" y="0" width="8" height="50"></rect>
-            <rect x="110" y="0" width="4" height="50"></rect>
-            <rect x="116" y="0" width="4" height="50"></rect>
-            <rect x="124" y="0" width="4" height="50"></rect>
-            <rect x="132" y="0" width="4" height="50"></rect>
-            <rect x="138" y="0" width="4" height="50"></rect>
-            <rect x="146" y="0" width="4" height="50"></rect>
-            <rect x="154" y="0" width="2" height="50"></rect>
-            <rect x="162" y="0" width="2" height="50"></rect>
-            <rect x="168" y="0" width="4" height="50"></rect>
-            <rect x="176" y="0" width="4" height="50"></rect>
-            <rect x="184" y="0" width="4" height="50"></rect>
-            <rect x="190" y="0" width="4" height="50"></rect>
-            <rect x="198" y="0" width="4" height="50"></rect>
-            <rect x="208" y="0" width="6" height="50"></rect>
-            <rect x="216" y="0" width="2" height="50"></rect>
-            <rect x="220" y="0" width="4" height="50"></rect>
-            <text style="font: 20px monospace" text-anchor="middle" x="112" y="72">IN2000005</text>
-          </g>
-        </svg>
-      </VCol>
-    </VRow>
-  </div>
-  <div class="part-second border-top pl-4 pr-4">
-    <VRow>
-      <VCol cols="8" class="customer-detail">
-        <h2 class="pb-3">CUSTOMER DETAIL:</h2>
-        <p class="pb-1">Modoway | Modoway</p>
-        <p class="pb-1">Address:</p>
-        <p class="pb-1">Tel: 5012345678</p>
-        <p class="pb-1">TRN:</p>
-      </VCol>
-      <VCol cols="4">
-        <h2 class="pb-3">INVOICE DETAIL:</h2>
-        <VRow class="invoice-detail">
-          <VCol cols="6">
-            <p class="pb-2">INVOICE NUMBER:</p>
-            <p class="pb-2">REFERENCE NUMBER:</p>
-            <p class="pb-2">INVOICE TYPE:</p>
-            <p class="pb-2">INVOICE DATE:</p>
-            <p class="pb-2">INVOICE CREATED AT</p>
-            <p class="pb-2">ROUTE:</p>
-          </VCol>
-          <VCol cols="6" class="text-end">
-            <p class="pb-2">IN2000005</p>
-            <p class="pb-2">xJlEqkHxZq</p>
-            <p class="pb-2">CASH</p>
-            <p class="pb-2">22-04-2024</p>
-            <p class="pb-2">22-04-2024 11:40 AM</p>
-            <p class="pb-2">200 | SPREADX</p>
-          </VCol>
-        </VRow>
-      </VCol>
-    </VRow>
-  </div>
-  <div class="part-third border-top pl-4 pr-4">
-    <table class="table mb-2">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Barcode</th>
-          <th>Description</th>
-          <th>UOM</th>
-          <th>BATCH</th>
-          <th>QTY</th>
-          <th>Gross Weight</th>
-          <th>Net Weight</th>
-          <th>Price</th>
-          <th>Discount</th>
-          <th>Total</th>
-          <th>Total Excl. VAT</th>
-          <th>VAT %</th>
-          <th>VAT Amount</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>DSGP01</td>
-          <td>A/GREEN EVAPORATED MILK ORIGINAL</td>
-          <td>CARTON</td>
-          <td>None</td>
-          <td>1</td>
-          <td>-</td>
-          <td>-</td>
-          <td>165.00</td>
-          <td>(0.00)</td>
-          <td>165.00</td>
-          <td>165.00</td>
-          <td>5.00</td>
-          <td>8.25</td>
-          <td>173.25</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="part-third-gross">
-      <div class="part-third-gross-width">
-        <div class="d-flex third-gross">
-          <p>GROSS SALES</p>
-          <p>165.00</p>
-        </div>
-        <div class="d-flex third-gross">
-          <p>DISCOUNT</p>
-          <p>(0.00)</p>
-        </div>
-        <div class="d-flex third-gross">
-          <p>NET TOTAL</p>
-          <p>165.00</p>
-        </div>
-        <div class="d-flex third-gross">
-          <p>VAT TOTAL</p>
-          <p>8.25</p>
-        </div>
-        <div class="d-flex third-gross">
-          <p>GRAND TOTAL</p>
-          <p>173.25</p>
-        </div>
-        <div class="d-flex third-gross">
-          <p>AMOUNT PAID</p>
-          <p>0.00</p>
-        </div>
-        <div class="d-flex third-gross">
-          <p>TOTAL DUE</p>
-          <p>173.25</p>
+  <div class="print-section">
+    <div class="part-first">
+      <VRow>
+        <VCol cols="2"></VCol>
+        <VCol cols="6" class="general-trading pt-5">
+          <p class="pb-1">DSG GENERAL TRADING LLC</p>
+          <p class="pb-1">دي أس جي التجارة العامة ذ م م</p>
+          <p class="pb-1">Tel : T 971-4-4457721 |F 971-4-8868394</p>
+          <p class="pb-1">Email : sales@dsggeneraltrading.com</p>
+          <p class="pb-1">Address : Ras Al Khor-Dubai -United Arab Emirates</p>
+          <p class="pb-1">TRN : 100510630500003</p>
+        </VCol>
+        <VCol cols="4" class="text-end">
+          <h1>TAX INVOICE</h1>
+          <span class="status">STATUS: COMPLETED</span>
+          <svg width="244px" height="92px" x="0px" y="0px" viewBox="0 0 244 92" style="transform: translate(5px,12px)">
+            <rect x="0" y="0" width="244" height="92" style="fill:#f8f7fa;"></rect>
+            <g transform="translate(10, 10)" style="fill:#000000;">
+              <rect x="0" y="0" width="4" height="50"></rect>
+              <rect x="6" y="0" width="2" height="50"></rect>
+              <rect x="12" y="0" width="2" height="50"></rect>
+              <rect x="22" y="0" width="4" height="50"></rect>
+              <rect x="32" y="0" width="2" height="50"></rect>
+              <rect x="40" y="0" width="2" height="50"></rect>
+              <rect x="44" y="0" width="2" height="50"></rect>
+              <rect x="48" y="0" width="6" height="50"></rect>
+              <rect x="60" y="0" width="4" height="50"></rect>
+              <rect x="66" y="0" width="4" height="50"></rect>
+              <rect x="74" y="0" width="6" height="50"></rect>
+              <rect x="84" y="0" width="2" height="50"></rect>
+              <rect x="88" y="0" width="2" height="50"></rect>
+              <rect x="92" y="0" width="6" height="50"></rect>
+              <rect x="100" y="0" width="8" height="50"></rect>
+              <rect x="110" y="0" width="4" height="50"></rect>
+              <rect x="116" y="0" width="4" height="50"></rect>
+              <rect x="124" y="0" width="4" height="50"></rect>
+              <rect x="132" y="0" width="4" height="50"></rect>
+              <rect x="138" y="0" width="4" height="50"></rect>
+              <rect x="146" y="0" width="4" height="50"></rect>
+              <rect x="154" y="0" width="2" height="50"></rect>
+              <rect x="162" y="0" width="2" height="50"></rect>
+              <rect x="168" y="0" width="4" height="50"></rect>
+              <rect x="176" y="0" width="4" height="50"></rect>
+              <rect x="184" y="0" width="4" height="50"></rect>
+              <rect x="190" y="0" width="4" height="50"></rect>
+              <rect x="198" y="0" width="4" height="50"></rect>
+              <rect x="208" y="0" width="6" height="50"></rect>
+              <rect x="216" y="0" width="2" height="50"></rect>
+              <rect x="220" y="0" width="4" height="50"></rect>
+              <text style="font: 20px monospace" text-anchor="middle" x="112" y="72">{{order.invoice_details.invoice_no}}</text>
+            </g>
+          </svg>
+        </VCol>
+      </VRow>
+    </div>
+    <div class="part-second border-top pl-4 pr-4">
+      <VRow>
+        <VCol cols="8" class="customer-detail">
+          <h2 class="pb-3">CUSTOMER DETAIL:</h2>
+          <p class="pb-1">{{order.customer_code}} | {{order.customer_name}}</p>
+          <p class="pb-1">Address: {{ userData.address }}</p>
+          <p class="pb-1">Tel: {{ userData.phone }}</p>
+          <p class="pb-1">TRN:</p>
+        </VCol>
+        <VCol cols="4">
+          <h2 class="pb-3">INVOICE DETAIL:</h2>
+          <VRow class="invoice-detail">
+            <VCol cols="6">
+              <p class="pb-2">INVOICE NUMBER:</p>
+              <p class="pb-2">REFERENCE NUMBER:</p>
+              <p class="pb-2">INVOICE TYPE:</p>
+              <p class="pb-2">INVOICE DATE:</p>
+              <p class="pb-2">INVOICE CREATED AT</p>
+              <p class="pb-2">ROUTE:</p>
+            </VCol>
+            <VCol cols="6" class="text-end">
+              <p class="pb-2">{{order.invoice_details.invoice_no}}</p>
+              <p class="pb-2">{{order.reference_no}}</p>
+              <p class="pb-2">{{order.invoice_details.invoice_type}}</p>
+              <p class="pb-2">{{order.order_date.substr(0,10)}}</p>
+              <p class="pb-2">{{order.created_at.substr(0,10)}}</p>
+              <p class="pb-2">200 | SPREADX</p>
+            </VCol>
+          </VRow>
+        </VCol>
+      </VRow>
+    </div>
+    <div class="part-third border-top pl-4 pr-4">
+      <table class="table mb-2">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Barcode</th>
+            <th>Description</th>
+            <th>UOM</th>
+            <th>BATCH</th>
+            <th>QTY</th>
+            <th>Gross Weight</th>
+            <th>Net Weight</th>
+            <th>Price</th>
+            <th>Discount</th>
+            <th>Total</th>
+            <th>Total Excl. VAT</th>
+            <th>VAT %</th>
+            <th>VAT Amount</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item, key in order.invoice_details.transactions">
+            <td>{{ key }}</td>
+            <td>DSGP{{key}}</td>
+            <td>A/GREEN EVAPORATED MILK ORIGINAL</td>
+            <td>CARTON</td>
+            <td>{{ item.batch_no || '-' }}</td>
+            <td>{{ item.qtty }}</td>
+            <td>{{ item.gross_weight }}</td>
+            <td>{{ item.net_weight }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.discount }}</td>
+            <td>{{ item.total_amount }}</td>
+            <td>{{ item.taxable_amount }}</td>
+            <td>{{ Math.round(item.vat_amount/item.total_amount * 100) }}</td>
+            <td>{{ item.vat_amount }}</td>
+            <td>{{ Math.round((item.total_amount + item.vat_amount) * 100)/100 }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="part-third-gross">
+        <div class="part-third-gross-width">
+          <div class="d-flex third-gross">
+            <p>GROSS SALES</p>
+            <p>{{ order.gross_sale }}</p>
+          </div>
+          <div class="d-flex third-gross">
+            <p>DISCOUNT</p>
+            <p>{{ order.discount }}</p>
+          </div>
+          <div class="d-flex third-gross">
+            <p>NET TOTAL</p>
+            <p>{{ order.net_total }}</p>
+          </div>
+          <div class="d-flex third-gross">
+            <p>VAT TOTAL</p>
+            <p>{{ order.vat_total }}</p>
+          </div>
+          <div class="d-flex third-gross">
+            <p>GRAND TOTAL</p>
+            <p>{{ order.grand_total }}</p>
+          </div>
+          <div class="d-flex third-gross">
+            <p>AMOUNT PAID</p>
+            <p>{{ order.vat_total  }}</p>
+          </div>
+          <div class="d-flex third-gross">
+            <p>TOTAL DUE</p>
+            <p>{{ order.vat_total + order.grand_total +  order.net_total }}</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="part-forth border-top pl-4 pr-4">
-    <h2 class="mb-2">PAYMENT DETAIL:</h2>
-    <table class="table" width="100%">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Receipt No</th>
-          <th>Amount</th>
-          <th>Payment Method</th>
-          <th>Payment Status</th>
-          <th>Additional Info</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>22-04-2024</td>
-          <td>PR0004</td>
-          <td>173.25</td>
-          <td>CASH</td>
-          <td>PENDING</td>
-          <td>N/A</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="part-fifth border-top pl-4 pr-4">
-    <div class="notice mb-3">
-      <p>NOTICE</p>
-      <p>Received the goods in good condition</p>
+    <div class="part-forth border-top pl-4 pr-4">
+      <h2 class="mb-2">PAYMENT DETAIL:</h2>
+      <table class="table" width="100%">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Receipt No</th>
+            <th>Amount</th>
+            <th>Payment Method</th>
+            <th>Payment Status</th>
+            <th>Additional Info</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="payment in order.payment_details">
+            <td>22-04-2024</td>
+            <td>{{ payment.receipt_number || '0' }}</td>
+            <td>{{ payment.amount }}</td>
+            <td>{{ payment.payment_method || '-' }}</td>
+            <td>{{ order.payment_status }}</td>
+            <td>N/A</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="thank">
-      <p>Thank You</p>
+    <div class="part-fifth border-top pl-4 pr-4">
+      <div class="notice mb-3">
+        <p>NOTICE</p>
+        <p>Received the goods in good condition</p>
+      </div>
+      <div class="thank">
+        <p>Thank You</p>
+      </div>
     </div>
   </div>
 </template>

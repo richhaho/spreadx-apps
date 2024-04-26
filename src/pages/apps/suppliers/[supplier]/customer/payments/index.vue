@@ -80,7 +80,8 @@ function toOrderDetail(order) {
             </VCol>   
             <VCol cols="5">
               <span class="float-left mt-2">Search: </span>
-              <v-text-field class="w-75"
+              <v-text-field
+                class="w-75"
                 v-model="search"
                 label="Search"
                 prepend-inner-icon="mdi-magnify"
