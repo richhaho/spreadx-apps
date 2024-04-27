@@ -9,7 +9,6 @@ const supplier_id = route.params.supplier
 demoVendorStore.fetchOrders(business_id, supplier_id)
 const orderData = computed(() => demoVendorStore.$state.orders)
 const orders = computed(() => orderData.value.length > 0 ? orderData.value[0].order_list : [])
-
 const search = '';
 const headers = [
   {
@@ -21,9 +20,9 @@ const headers = [
   {key:'invoice_number', title:'INVOICE NUMBER'},
   {key:'invoice_total', title:'INVOICE TOTAL'},
   {key:'balance',  title:'BALANCE'},
-  {key:'amount', title:'AMOUNT TO PAY'}
+  {key:'amount', title:'AMOUNT TO PAY'},
+  {key: 'action', title: 'Action', sortable: false}
 ];
-
 const invoices = computed(() => {
   const invoices = [];
   orders.value.forEach(item => {
@@ -35,14 +34,14 @@ const invoices = computed(() => {
           invoice_number: invoice.invoice_no,
           invoice_total: invoice.net_total + invoice.grand_total + invoice.vat_total,
           balance: '-',
-          amount: invoice.pending_amount,
         })
-      
     }
   })
   return invoices
 })
-
+function downloadInvoice(item) {
+  localStorage.setItem("invoice", JSON.stringify(item));
+}
 </script>
 
 <template>
@@ -124,6 +123,12 @@ const invoices = computed(() => {
           </VRow>
         </template>
         <v-data-table class="table" :headers="headers" :search="search" :item-value="item => `${item.num}-${item.version}`"  :items="invoices" items-per-page="5" show-select>
+          <template v-slot:item.amount="{item}">
+            <v-text-field></v-text-field>
+          </template>
+          <template v-slot:item.action="{item}">
+            <v-btn color="primary" @click="downloadInvoice(item)" :to="`/apps/suppliers/${supplier_id}/customer/payments/${item.invoice_number}`">View</v-btn>
+          </template>
         </v-data-table>
       </VCard>
       </VCol>
