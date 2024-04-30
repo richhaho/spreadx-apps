@@ -49,6 +49,12 @@ console.log(selected)
 const results = [];
 function enterSelect(){
   this.selected.map(function(e){
+    JSON.parse(localStorage.getItem('makePayment')).map(function(a){
+      console.log(a.invoice_date);
+      if(a.invoice_date ===  e.invoice_date){
+        return;
+      }
+    })
     results.push({
       num : e.num,
       invoice_date : e.invoice_date,
@@ -57,7 +63,7 @@ function enterSelect(){
       balance : e.balance
     })
   });
-  console.log(results);
+  console.log(JSON.parse(localStorage.getItem('makePayment')));
   if(this.selected.length == this.itemsPerpage){
     console.log('seleced all')
   }
