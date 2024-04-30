@@ -10,6 +10,7 @@ demoVendorStore.fetchOrders(business_id, supplier_id)
 const orderData = computed(() => demoVendorStore.$state.orders)
 const orders = computed(() => orderData.value.length > 0 ? orderData.value[0].order_list : [])
 const search = '';
+
 const headers = [
   {
     title: '#',
@@ -41,6 +42,28 @@ const invoices = computed(() => {
 })
 function downloadInvoice(item) {
   localStorage.setItem("invoice", JSON.stringify(item));
+}
+const itemsPerpage = 3;
+const selected = [];
+console.log(selected)
+const results = [];
+function enterSelect(){
+  this.selected.map(function(e){
+    results.push({
+      num : e.num,
+      invoice_date : e.invoice_date,
+      invoice_number : e.invoice_number,
+      invoice_total : e.invoice_total,
+      balance : e.balance
+    })
+  });
+  console.log(results);
+  if(this.selected.length == this.itemsPerpage){
+    console.log('seleced all')
+  }
+}
+function viewPayment(results){
+  localStorage.setItem('makePayment', JSON.stringify(results));
 }
 </script>
 
@@ -100,15 +123,15 @@ function downloadInvoice(item) {
       >
       <VCard class="pr-5 pl-5">
         <template v-slot:text >
-          <VRow style="display: flex; justify-content: space-between; ">
-            <VCol cols="4" class="d-flex">
+          <div class="d-flex header-part">
+            <div class="d-flex entry-div">
               <span class="mt-2 mr-1">Show</span>
               <v-select 
               :items="['5', '25', '50', '75', '100', 'ALL']"
               ></v-select>
               <span class="pt-2 ml-1">entries</span>   
-            </VCol>   
-            <VCol cols="5">
+            </div>
+            <div class="search-div d-flex">
               <span class="float-left mt-2 mr-1">Search: </span>
               <v-text-field
                 class="w-75"
@@ -117,17 +140,17 @@ function downloadInvoice(item) {
                 prepend-inner-icon="mdi-magnify"
                 variant="outlined"
                 hide-details
-                single-line
               ></v-text-field>
-            </VCol>
-          </VRow>
+            </div>
+          </div>
         </template>
-        <v-data-table class="table" :headers="headers" :search="search" :item-value="item => `${item.num}-${item.version}`"  :items="invoices" items-per-page="5" show-select>
+        <VBtn color="info" class="payment-button mb-3" @click="viewPayment(results)" :to="`/apps/suppliers/${supplier_id}/customer/payments/makePayment`">Make a payment</VBtn>
+        <v-data-table v-model="selected" @input="enterSelect()" class="table" :headers="headers" :search="search" :item-value="item => `${item.num}-${item.version}`"  :items="invoices" items-per-page="5" return-object select-all show-select>
           <template v-slot:item.amount="{item}">
-            <v-text-field></v-text-field>
+            <v-text-field class="amount-input"></v-text-field>
           </template>
           <template v-slot:item.action="{item}">
-            <v-btn color="primary" @click="downloadInvoice(item)" :to="`/apps/suppliers/${supplier_id}/customer/payments/${item.invoice_number}`">View</v-btn>
+            <v-btn color="primary"  size="small" @click="downloadInvoice(item)" :to="`/apps/suppliers/${supplier_id}/customer/payments/${item.invoice_number}`">View</v-btn>
           </template>
         </v-data-table>
       </VCard>
@@ -181,5 +204,18 @@ function downloadInvoice(item) {
   border-color:green;
   border-width: 1px;
 }
-
+.make-payment-button{
+  display: flex;
+  justify-content: flex-end;
+}
+.payment-button{
+  float: right;
+}
+.entry-div{
+  width: 30%;
+  height: 20px;
+} 
+.search-div{width: 50%;}
+.header-part{justify-content: space-between;}
+.v-card-text{padding: 20px 0;}
 </style>
