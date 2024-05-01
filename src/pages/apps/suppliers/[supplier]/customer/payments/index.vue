@@ -43,8 +43,8 @@ const invoices = computed(() => {
 function downloadInvoice(item) {
   localStorage.setItem("invoice", JSON.stringify(item));
 }
-const itemsPerpage = 3;
 const select = [];
+const itemsPerpage = 3;
 const results = [];
 function enterSelect(){
   this.select.map(function(e){
@@ -63,7 +63,7 @@ function enterSelect(){
     })
   });
   console.log(JSON.parse(localStorage.getItem('makePayment')));
-  console.log(select)
+  console.log(this.select.length)
 }
 function viewPayment(results){
   localStorage.setItem('makePayment', JSON.stringify(results));
