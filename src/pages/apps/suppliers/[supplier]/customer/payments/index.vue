@@ -45,7 +45,6 @@ function downloadInvoice(item) {
 }
 const itemsPerpage = 3;
 const selected = [];
-console.log(selected)
 const results = [];
 function enterSelect(){
   this.selected.map(function(e){
@@ -64,9 +63,7 @@ function enterSelect(){
     })
   });
   console.log(JSON.parse(localStorage.getItem('makePayment')));
-  if(this.selected.length == this.itemsPerpage){
-    console.log('seleced all')
-  }
+
 }
 function viewPayment(results){
   localStorage.setItem('makePayment', JSON.stringify(results));

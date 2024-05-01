@@ -9,13 +9,13 @@ import { loadFonts } from "@/plugins/webfontloader";
 import router from "@/router";
 import { abilitiesPlugin } from '@casl/vue';
 import "@core/scss/template/index.scss";
+import { PhoneInput } from '@lbgm/phone-number-input';
 import "@styles/styles.scss";
 import "flag-icons/css/flag-icons.min.css";
 import { createPinia } from "pinia";
 import { createVPhoneInput } from "v-phone-input";
 import "v-phone-input/dist/v-phone-input.css";
 import { createApp } from "vue";
-import { PhoneInput } from '@lbgm/phone-number-input';
 
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';

@@ -57,7 +57,7 @@ const dialogModelValueUpdate = val => {
         <VForm @submit.prevent="onFormSubmit">
           <VRow>
             <VCol
-              cols="12"
+              cols="6"
               md="6"
             >
               <VTextField
@@ -66,7 +66,7 @@ const dialogModelValueUpdate = val => {
               />
             </VCol>
             <VCol
-              cols="12"
+              cols="6"
               md="6"
             >
               <VTextField
@@ -76,7 +76,7 @@ const dialogModelValueUpdate = val => {
             </VCol>
 
             <VCol
-              cols="12"
+              cols="6"
               md="6"
             >
               <VTextField
@@ -85,7 +85,7 @@ const dialogModelValueUpdate = val => {
               />
             </VCol>
             <VCol
-              cols="12"
+              cols="6"
               md="6"
             >
               <VTextField
@@ -106,7 +106,7 @@ const dialogModelValueUpdate = val => {
             </VCol>
 
             <VCol
-              cols="12"
+              cols="6"
               md="6"
             >
               <VTextField
@@ -115,7 +115,7 @@ const dialogModelValueUpdate = val => {
               />
             </VCol>
             <VCol
-              cols="12"
+              cols="6"
               md="6"
             >
               <VTextField
