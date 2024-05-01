@@ -44,16 +44,12 @@ function downloadInvoice(item) {
   localStorage.setItem("invoice", JSON.stringify(item));
 }
 const itemsPerpage = 3;
-const select = [];
+
 const results = [];
-function enterSelect(){
-  this.select.map(function(e){
-    JSON.parse(localStorage.getItem('makePayment')).map(function(a){
-      console.log(a.invoice_date);
-      if(a.invoice_date ===  e.invoice_date){
-        return;
-      }
-    })
+const selected = [];
+function enterSelect() {
+  console.log(this);
+  this.selected.map(function(e){
     results.push({
       num : e.num,
       invoice_date : e.invoice_date,
@@ -62,12 +58,12 @@ function enterSelect(){
       balance : e.balance
     })
   });
-  console.log(JSON.parse(localStorage.getItem('makePayment')));
-  console.log(this.select.length)
+  console.log(results);
 }
 function viewPayment(results){
   localStorage.setItem('makePayment', JSON.stringify(results));
 }
+
 </script>
 
 <template>
@@ -148,7 +144,7 @@ function viewPayment(results){
           </div>
         </template>
         <VBtn color="info" class="payment-button mb-3" @click="viewPayment(results)" :to="`/apps/suppliers/${supplier_id}/customer/payments/makePayment`">Make a payment</VBtn>
-        <v-data-table v-model="select" @change="enterSelect()" class="table" :headers="headers" :search="search" :item-value="item => `${item.num}-${item.version}`"  :items="invoices" items-per-page="5" return-object select-all show-select>
+        <v-data-table v-model="selected" @input="enterSelect()" class="table" :headers="headers" :search="search" :item-value="item => `${item.num}-${item.version}`"  :items="invoices" items-per-page="5" return-object show-select>
           <template v-slot:item.amount="{item}">
             <v-text-field class="amount-input"></v-text-field>
           </template>
@@ -218,7 +214,13 @@ function viewPayment(results){
   width: 30%;
   height: 20px;
 } 
-.search-div{width: 50%;}
-.header-part{justify-content: space-between;}
-.v-card-text{padding: 20px 0;}
+.search-div {
+  width: 50%;
+}
+.header-part {
+  justify-content: space-between;
+}
+.v-card-text {
+  padding: 20px 0;
+}
 </style>

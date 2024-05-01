@@ -17,9 +17,9 @@ import { createVPhoneInput } from "v-phone-input";
 import "v-phone-input/dist/v-phone-input.css";
 import { createApp } from "vue";
 
+import VueGoogleMaps from '@fawmi/vue-google-maps';
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
-
 // register as global component
 
 loadFonts();
@@ -48,4 +48,9 @@ app.use(abilitiesPlugin, ability, {
 })
 
 // Mount vue app
-app.mount("#app");
+app.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyDuJ5UuPLC5IUXfp5JdyGszcVdpbKspSVQ',
+    libraries: "places"
+  }
+}).mount("#app");

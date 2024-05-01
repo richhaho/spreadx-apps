@@ -126,5 +126,9 @@ export default defineConfig({
     entries: [
       './src/**/*.vue',
     ],
+    include: [
+      "@fawmi/vue-google-maps",
+      "fast-deep-equal"
+    ]
   },
 })
