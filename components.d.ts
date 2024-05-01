@@ -282,6 +282,7 @@ declare module '@vue/runtime-core' {
     EnableOneTimePasswordDialog: typeof import('./src/@core/components/EnableOneTimePasswordDialog.vue')['default']
     ErrorHeader: typeof import('./src/@core/components/ErrorHeader.vue')['default']
     GeneateApprovalUrlDialog: typeof import('./src/@core/components/GeneateApprovalUrlDialog.vue')['default']
+    'Google.map': typeof import('./src/@core/components/google.map.vue')['default']
     I18n: typeof import('./src/@core/components/I18n.vue')['default']
     NavbarCart: typeof import('./src/@core/components/NavbarCart.vue')['default']
     Notifications: typeof import('./src/@core/components/Notifications.vue')['default']
