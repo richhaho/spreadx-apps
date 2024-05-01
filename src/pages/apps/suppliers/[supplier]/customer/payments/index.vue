@@ -44,10 +44,10 @@ function downloadInvoice(item) {
   localStorage.setItem("invoice", JSON.stringify(item));
 }
 const itemsPerpage = 3;
-const value = [];
+const select = [];
 const results = [];
 function enterSelect(){
-  this.value.map(function(e){
+  this.select.map(function(e){
     JSON.parse(localStorage.getItem('makePayment')).map(function(a){
       console.log(a.invoice_date);
       if(a.invoice_date ===  e.invoice_date){
@@ -63,7 +63,7 @@ function enterSelect(){
     })
   });
   console.log(JSON.parse(localStorage.getItem('makePayment')));
-  console.log(value)
+  console.log(select)
 }
 function viewPayment(results){
   localStorage.setItem('makePayment', JSON.stringify(results));
@@ -148,7 +148,7 @@ function viewPayment(results){
           </div>
         </template>
         <VBtn color="info" class="payment-button mb-3" @click="viewPayment(results)" :to="`/apps/suppliers/${supplier_id}/customer/payments/makePayment`">Make a payment</VBtn>
-        <v-data-table v-model="value" @change="enterSelect()" class="table" :headers="headers" :search="search" :item-value="item => `${item.num}-${item.version}`"  :items="invoices" items-per-page="5" return-object select-all show-select>
+        <v-data-table v-model="select" @change="enterSelect()" class="table" :headers="headers" :search="search" :item-value="item => `${item.num}-${item.version}`"  :items="invoices" items-per-page="5" return-object select-all show-select>
           <template v-slot:item.amount="{item}">
             <v-text-field class="amount-input"></v-text-field>
           </template>
