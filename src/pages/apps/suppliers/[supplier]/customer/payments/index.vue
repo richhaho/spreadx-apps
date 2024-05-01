@@ -46,10 +46,10 @@ function downloadInvoice(item) {
 const itemsPerpage = 3;
 
 const results = [];
-const selected = [];
+const selectedData = [];
 function enterSelect() {
   console.log(this);
-  this.selected.map(function(e){
+  this.selectedData.map(function(e){
     results.push({
       num : e.num,
       invoice_date : e.invoice_date,
@@ -144,7 +144,7 @@ function viewPayment(results){
           </div>
         </template>
         <VBtn color="info" class="payment-button mb-3" @click="viewPayment(results)" :to="`/apps/suppliers/${supplier_id}/customer/payments/makePayment`">Make a payment</VBtn>
-        <v-data-table v-model="selected" @input="enterSelect()" class="table" :headers="headers" :search="search" :item-value="item => `${item.num}-${item.version}`"  :items="invoices" items-per-page="5" return-object show-select>
+        <v-data-table v-model="selectedData" @input="enterSelect()" class="table" :headers="headers" :search="search" :item-value="item => `${item.num}-${item.version}`"  :items="invoices" items-per-page="5" return-object show-select>
           <template v-slot:item.amount="{item}">
             <v-text-field class="amount-input"></v-text-field>
           </template>
