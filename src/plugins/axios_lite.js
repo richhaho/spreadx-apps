@@ -5,7 +5,7 @@ const base_api_url =
 const access_token = localStorage.getItem("accessToken");
 
 const axios_lite = axios.create({
-  baseURL: "/lite", //  "/lite"
+  baseURL: base_api_url || "/lite", //  "/lite"
   withCredentials: false,
   headers: {
     'Access-Control-Allow-Origin': "*"

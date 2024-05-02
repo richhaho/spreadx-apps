@@ -51,9 +51,9 @@ app.use(abilitiesPlugin, ability, {
 app.use(VueGoogleMaps, {
   load: {
     //your api key
-    // key: 'AIzaSyDuJ5UuPLC5IUXfp5JdyGszcVdpbKspSVQ', 
+    key: 'AIzaSyDuJ5UuPLC5IUXfp5JdyGszcVdpbKspSVQ', 
     //java sample key
-    key: 'AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg',
+    // key: 'AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg',
     libraries: "places"
   }
 }).mount("#app");
