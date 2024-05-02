@@ -58,9 +58,25 @@ export default {
     };
     this.mapZoom = 15
   },
- // mapZ;
+ geolocate: function () {
+    navigator.geolocation.getCurrentPosition((position) => {
+     this.mapCenter = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+     };
+     this.markerPosition = {
+       lat: position.coords.latitude,
+       lng: position.coords.longitude,
+     };
+    });
+   },
   },
+  mounted() {
+   this.geolocate();
+   this.mapZoom = 16
+  }
  };
+ 
 </script>
 
 <template>
@@ -91,15 +107,15 @@ export default {
           >
           </GMapAutocomplete>
           <GMapMap
-          :center="mapCenter"
-          :zoom="mapZoom"
-          style="width: 100%; height: 250px"
+            :center="mapCenter"
+            :zoom="mapZoom"
+            style="width: 100%; height: 250px"
           >
           <GMapMarker :position="markerPosition" @click="zoom"/>
           </GMapMap>
-          <V-btn
+          <v-btn
            text="locate me"
-           
+           @click="geolocate"
           ></v-btn>
         </div>
         <VForm @submit.prevent="onFormSubmit">
@@ -224,6 +240,7 @@ export default {
 }
 .map div{
  border-radius:7px; 
+ margin-bottom:5px;
 }
 .map input{
   margin-bottom:15px;
