@@ -34,27 +34,25 @@ const dialogModelValueUpdate = val => {
 }
 </script>
 <script>
-
-
- export default {
+export default {
   name: "App",
   data() {
    return {
     mapCenter: { lat: 6.465422, lng: 3.406448 }, // Initial center
     mapZoom: 7, // Initial zoom level
-    markerPosition: { lat: 6.465422, lng: 3.406448 }, // Marker position will be set based on searched location
+    markerPosition: null, // Marker position will be set based on searched location
    };
   },
   methods: {
-   setPlace(place) {
-    console.log(place.geometry)
+   setPlace(places) {
+    // console.log(places)
     this.markerPosition = {
-     lat: place.geometry.location.lat(),
-     lng: place.geometry.location.lng(),
+     lat: places.geometry.location.lat(),
+     lng: places.geometry.location.lng(),
     };
     this.mapCenter = {
-     lat: place.geometry.location.lat(),
-     lng: place.geometry.location.lng(),
+     lat: places.geometry.location.lat(),
+     lng: places.geometry.location.lng(),
     };
    },
   },
@@ -66,6 +64,7 @@ const dialogModelValueUpdate = val => {
     :width="$vuetify.display.smAndDown ? 'auto' : 650 "
     :model-value="props.isDialogVisible"
     @update:model-value="dialogModelValueUpdate"
+    class="maps"
   >
     <!-- Dialog close btn -->
     <DialogCloseBtn @click="dialogModelValueUpdate(false)" />
@@ -80,17 +79,16 @@ const dialogModelValueUpdate = val => {
         </VCardTitle>
       </VCardItem>
       <VCardText>
-        <div class="map">
+        <div>
           <GMapAutocomplete
-          placeholder="This is a placeholder"
-          @place_changed="setPlace"
-          style="font-size: large"
+            placeholder="This is a placeholder"
+            @place_changed="setPlace"
+            style="font-size: large"
           ></GMapAutocomplete>
           <GMapMap
           :center="mapCenter"
           :zoom="mapZoom"
           style="width: 100%; height: 250px"
-
           >
           <GMapMarker :position="markerPosition" />
           </GMapMap>
@@ -214,5 +212,9 @@ const dialogModelValueUpdate = val => {
 <style lang="scss">
 .map{
   margin-bottom:15px;
+  
+}
+.pac-container{
+  z-index:2401;
 }
 </style>
