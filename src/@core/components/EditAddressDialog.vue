@@ -41,6 +41,7 @@ export default {
     mapCenter: { lat: 6.465422, lng: 3.406448 }, // Initial center
     mapZoom: 7, // Initial zoom level
     markerPosition: null, // Marker position will be set based on searched location
+    
    };
   },
   methods: {
@@ -53,8 +54,11 @@ export default {
     this.mapCenter = {
      lat: places.geometry.location.lat(),
      lng: places.geometry.location.lng(),
+    //  mapZoom:15
     };
-   },
+    this.mapZoom = 15
+  },
+ // mapZ;
   },
  };
 </script>
@@ -84,14 +88,19 @@ export default {
             placeholder="This is a placeholder"
             @place_changed="setPlace"
             style="font-size: large"
-          ></GMapAutocomplete>
+          >
+          </GMapAutocomplete>
           <GMapMap
           :center="mapCenter"
           :zoom="mapZoom"
           style="width: 100%; height: 250px"
           >
-          <GMapMarker :position="markerPosition" />
+          <GMapMarker :position="markerPosition" @click="zoom"/>
           </GMapMap>
+          <V-btn
+           text="locate me"
+           
+          ></v-btn>
         </div>
         <VForm @submit.prevent="onFormSubmit">
           <VRow>
@@ -213,6 +222,9 @@ export default {
 .map{
   margin-bottom:15px;
 }
+.map div{
+ border-radius:7px; 
+}
 .map input{
   margin-bottom:15px;
   outline:none;
@@ -220,6 +232,7 @@ export default {
   width:100%;
   height:40px;
   border-radius:6px;
+  padding-left:5px;
 }
 .map input:hover{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
