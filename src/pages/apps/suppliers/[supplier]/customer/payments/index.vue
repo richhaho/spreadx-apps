@@ -48,7 +48,7 @@ const itemsPerpage = 3;
 const results = [];
 const selectedData = [];
 function enterSelect() {
-  console.log(this);
+  console.log(this.selectedData);
   this.selectedData.map(function(e){
     results.push({
       num : e.num,
