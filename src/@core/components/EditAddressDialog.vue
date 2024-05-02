@@ -79,7 +79,7 @@ export default {
         </VCardTitle>
       </VCardItem>
       <VCardText>
-        <div>
+        <div class="map">
           <GMapAutocomplete
             placeholder="This is a placeholder"
             @place_changed="setPlace"
@@ -212,7 +212,19 @@ export default {
 <style lang="scss">
 .map{
   margin-bottom:15px;
-  
+}
+.map input{
+  margin-bottom:15px;
+  outline:none;
+  border:1px solid black;
+  width:100%;
+  height:40px;
+  border-radius:6px;
+}
+.map input:hover{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  outline:none;
+  border:1px solid black;
 }
 .pac-container{
   z-index:2401;
