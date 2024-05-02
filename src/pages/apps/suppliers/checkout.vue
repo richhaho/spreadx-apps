@@ -85,7 +85,6 @@ async function orderNow() {
   await demoVendorStore.storeOrder(business_id, payload)
   setTimeout(() => { router.push('/apps/suppliers/payment') }, 2500)
 }
-
 </script>
 
 <template>
@@ -97,7 +96,7 @@ async function orderNow() {
         sm="12"        
         relative
       >
-        <div class="d-flex justify-space-between mt-3 ml-3 mr-3 mb-1">
+      <div class="d-flex justify-space-between mt-3 ml-3 mr-3 mb-1">
           <h4>Delivery Address</h4>
           <div>
             <VIcon
@@ -385,7 +384,10 @@ async function orderNow() {
   padding: 20px;
   text-align: start;
 }
-
+#map {
+  height: 100px !important;
+  width: 100px !important;
+}
 .welcome-container {
   padding: 20px;
   background-color: white;

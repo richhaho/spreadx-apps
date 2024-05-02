@@ -7,7 +7,7 @@ const props = defineProps({
   isDialogVisible: {
     type: Boolean,
     required: true,
-  },
+  }
 })
 
 
@@ -33,6 +33,33 @@ const dialogModelValueUpdate = val => {
   emit('update:isDialogVisible', val)
 }
 </script>
+<script>
+
+
+ export default {
+  name: "App",
+  data() {
+   return {
+    mapCenter: { lat: 6.465422, lng: 3.406448 }, // Initial center
+    mapZoom: 7, // Initial zoom level
+    markerPosition: { lat: 6.465422, lng: 3.406448 }, // Marker position will be set based on searched location
+   };
+  },
+  methods: {
+   setPlace(place) {
+    console.log(place.geometry)
+    this.markerPosition = {
+     lat: place.geometry.location.lat(),
+     lng: place.geometry.location.lng(),
+    };
+    this.mapCenter = {
+     lat: place.geometry.location.lat(),
+     lng: place.geometry.location.lng(),
+    };
+   },
+  },
+ };
+</script>
 
 <template>
   <VDialog
@@ -52,8 +79,22 @@ const dialogModelValueUpdate = val => {
           Delivery Address
         </VCardTitle>
       </VCardItem>
-
       <VCardText>
+        <div class="map">
+          <GMapAutocomplete
+          placeholder="This is a placeholder"
+          @place_changed="setPlace"
+          style="font-size: large"
+          ></GMapAutocomplete>
+          <GMapMap
+          :center="mapCenter"
+          :zoom="mapZoom"
+          style="width: 100%; height: 250px"
+
+          >
+          <GMapMarker :position="markerPosition" />
+          </GMapMap>
+        </div>
         <VForm @submit.prevent="onFormSubmit">
           <VRow>
             <VCol
@@ -170,3 +211,8 @@ const dialogModelValueUpdate = val => {
     </VCard>
   </VDialog>
 </template>
+<style lang="scss">
+.map{
+  margin-bottom:15px;
+}
+</style>

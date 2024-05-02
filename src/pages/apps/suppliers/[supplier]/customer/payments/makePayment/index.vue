@@ -2,7 +2,8 @@
 import { useRoute } from 'vue-router';
 const route = useRoute()
 const supplier_id = route.params.supplier
-const data = JSON.parse(localStorage.getItem('makePayment'))
+const data = JSON.parse(localStorage.getItem('makePayment'));
+// localStorage.removeItem('makePayment');
 </script>
 
 <template>
