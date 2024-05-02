@@ -50,7 +50,9 @@ app.use(abilitiesPlugin, ability, {
 // Mount vue app
 app.use(VueGoogleMaps, {
   load: {
+    
     key: 'AIzaSyDuJ5UuPLC5IUXfp5JdyGszcVdpbKspSVQ',
+    // key: 'AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg',
     libraries: "places"
   }
 }).mount("#app");
