@@ -166,7 +166,6 @@ function viewPayment(results){
             <v-btn color="primary"  size="small" @click="downloadInvoice(item)" :to="`/apps/suppliers/${supplier_id}/customer/payments/${item.invoice_number}`">View</v-btn>
           </template>
         </v-data-table> -->
-        <pre>{{selected}}</pre>
       </VCard>
       </VCol>
     </VRow>
