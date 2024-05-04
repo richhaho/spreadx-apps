@@ -10,7 +10,7 @@ demoVendorStore.fetchOrders(business_id, supplier_id)
 const orderData = computed(() => demoVendorStore.$state.orders)
 const orders = computed(() => orderData.value.length > 0 ? orderData.value[0].order_list : [])
 const search = '';
-
+const selected = [];
 const headers = [
   {
     title: '#',
@@ -43,27 +43,23 @@ const invoices = computed(() => {
 function downloadInvoice(item) {
   localStorage.setItem("invoice", JSON.stringify(item));
 }
-const itemsPerpage = 3;
-
-const results = [];
-const selectedData = [];
-function enterSelect() {
-  console.log(this.selectedData);
-  this.selectedData.map(function(e){
-    results.push({
-      num : e.num,
-      invoice_date : e.invoice_date,
-      invoice_number : e.invoice_number,
-      invoice_total : e.invoice_total,
-      balance : e.balance
-    })
-  });
-  console.log(results);
-}
+// const results = [];
+// function enterSelect() {
+//   console.log(this.selected);
+//   this.selected.map(function(e){
+//     results.push({
+//       num : e.num,
+//       invoice_date : e.invoice_date,
+//       invoice_number : e.invoice_number,
+//       invoice_total : e.invoice_total,
+//       balance : e.balance
+//     })
+//   });
+//   console.log(results);
+// }
 function viewPayment(results){
   localStorage.setItem('makePayment', JSON.stringify(results));
 }
-
 </script>
 
 <template>
@@ -143,15 +139,33 @@ function viewPayment(results){
             </div>
           </div>
         </template>
-        <VBtn color="info" class="payment-button mb-3" @click="viewPayment(results)" :to="`/apps/suppliers/${supplier_id}/customer/payments/makePayment`">Make a payment</VBtn>
-        <v-data-table v-model="selectedData" @input="enterSelect()" class="table" :headers="headers" :search="search" :item-value="item => `${item.num}-${item.version}`"  :items="invoices" items-per-page="5" return-object show-select>
+        <VBtn color="info" class="payment-button mb-3" @click="viewPayment(selected)" :to="`/apps/suppliers/${supplier_id}/customer/payments/makePayment`">Make a payment</VBtn>
+        <v-data-table
+          v-model="selected"
+          :headers="headers"
+          :items="invoices"
+          :item-value="item => `${item.num}-${item.version}`"
+          items-per-page="5"
+          return-object
+          show-select
+        >
           <template v-slot:item.amount="{item}">
             <v-text-field class="amount-input"></v-text-field>
           </template>
           <template v-slot:item.action="{item}">
             <v-btn color="primary"  size="small" @click="downloadInvoice(item)" :to="`/apps/suppliers/${supplier_id}/customer/payments/${item.invoice_number}`">View</v-btn>
           </template>
+      
         </v-data-table>
+        <!-- <v-data-table v-model="selected" :headers="headers" :search="search" :item-value="item => `${item.num}-${item.version}`"  :items="invoices" items-per-page="5" return-object show-select>
+       
+          <template v-slot:item.amount="{item}">
+            <v-text-field class="amount-input"></v-text-field>
+          </template>
+          <template v-slot:item.action="{item}">
+            <v-btn color="primary"  size="small" @click="downloadInvoice(item)" :to="`/apps/suppliers/${supplier_id}/customer/payments/${item.invoice_number}`">View</v-btn>
+          </template>
+        </v-data-table> -->
       </VCard>
       </VCol>
     </VRow>
